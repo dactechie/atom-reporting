@@ -18,24 +18,25 @@ async function getClientDataByPartitionKey(
   userMode = APPLICATION_MODE_NORMAL,
   entity = DB_ENTITY_NAME
 ) {
-  // let data = {
-  //   Entity: entity,
-  //   idType: PARTITION_KEY,
-  //   clientID: partitionKey,
-  //   requestType: "GET",
-  //   userMode: userMode
-  // };
-  // const result = await doPostAction(GET_URL, data);
+  let data = {
+    Entity: entity,
+    idType: PARTITION_KEY,
+    clientID: partitionKey,
+    requestType: "GET",
+    userMode: userMode
+  };
+  const result = await doPostAction(GET_URL, data);
   // const r = fromAZDataArray(await result.value);
   // const r = await mockClientData;
-  let url = "../src/api/mockClientData2.json";
-  await sleep(500);
-  let response = await fetch(url);
-  await sleep(500);
-  let rjson = await response.json();
-  let result = await rjson[partitionKey];
 
-  console.log("return from backend ", await result);
+  // let url = "../src/api/mockClientData2.json";
+  // await sleep(500);
+  // let response = await fetch(url);
+  // await sleep(500);
+  // let rjson = await response.json();
+  // let result = await rjson[partitionKey];
+
+  // console.log("return from backend ", await result);
   return await result;
 }
 
