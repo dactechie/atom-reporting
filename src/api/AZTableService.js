@@ -1,10 +1,10 @@
-// import { doPostAction } from "./RESTClient";
+import { doPostAction } from "./RESTClient";
 import {
   PARTITION_KEY,
   DB_ENTITY_NAME,
   APPLICATION_MODE_NORMAL
 } from "../common/constants";
-// import { fromAZDataArray } from "../common/AZDataAdapter";
+import { fromAZDataArray } from "../common/AZDataAdapter";
 // import mockClientData from "./mockClientData";
 
 const GET_URL = import.meta.env.VITE_APP_GET_TABLESTORE_LOGAPP;
@@ -26,7 +26,7 @@ async function getClientDataByPartitionKey(
     userMode: userMode
   };
   const result = await doPostAction(GET_URL, data);
-  // const r = fromAZDataArray(await result.value);
+  const r = fromAZDataArray(await result.value);
   // const r = await mockClientData;
 
   // let url = "../src/api/mockClientData2.json";
@@ -37,7 +37,7 @@ async function getClientDataByPartitionKey(
   // let result = await rjson[partitionKey];
 
   // console.log("return from backend ", await result);
-  return await result;
+  return r;
 }
 
 export { getClientDataByPartitionKey };
