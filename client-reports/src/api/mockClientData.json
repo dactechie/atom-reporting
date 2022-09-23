@@ -1,0 +1,50 @@
+{
+  "ALLFT210719811": [
+    {
+      "PartitionKey": "ALLFT210719811",
+      "RowKey": "COCO_SITK_20220810",
+      "Timestamp": "2022-08-10T07:36:31.357Z",
+      "AreYouAccessingOtherServices": "Yes",
+      "AreYouCurrentlyTakingMeds": "Yes",
+      "AssessmentDate": "2022-08-10",
+      "PDCAgeFirstUsed": 46,
+      "PDCAgeLastUsed": 84,
+      "PDCDaysInLast28": 3,
+      "PDCHowMuchPerOccassion": "6",
+      "PDCMethodOfUse": "Transdermal",
+      "PDCSubstanceOrGambling": "Benzodiazepines, n.f.d.",
+      "SDS_Score": 7
+    },
+    {
+      "PartitionKey": "ALLFT210719811",
+      "AssessmentDate": "2022-08-05",
+      "PDCAgeFirstUsed": 46,
+      "PDCAgeLastUsed": 84,
+      "PDCDaysInLast28": 3,
+      "PDCHowMuchPerOccassion": "6",
+      "PDCMethodOfUse": "Transdermal",
+      "PDCSubstanceOrGambling": "Benzodiazepines, n.f.d.",
+      "PDCUnits": "grams",
+      "SDS_Score": 8
+    },
+    {
+      "PartitionKey": "ALLFT210719811",
+      "AssessmentDate": "2022-06-22",
+      "PDCDaysInLast28": 2,
+      "PDCHowMuchPerOccassion": "4",
+      "PDCMethodOfUse": "Inject",
+      "PDCSubstanceOrGambling": "Amphetamines, n.f.d",
+      "PDCUnits": "grams",
+      "SDS_Score": 9
+    },
+    {
+      "PartitionKey": "ALLFT210719811",
+      "RowKey": "TSS_ITSP_20210729",
+      "Timestamp": "2021-07-28T22:18:32.056Z",
+      "AssessmentDate": "2021-07-29",
+      "PDCMethodOfUse": "Smoke",
+      "PDCSubstanceOrGambling": "Benzodiazepines, n.f.d.",
+      "SDS_Score": 8
+    }
+  ]
+}
