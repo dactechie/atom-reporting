@@ -159,26 +159,7 @@ function setupGenericMulti(chartVariable, dataKeys, xaxis) {
       maintainAspectRatio: true,
       scales: {
         offset: true
-        // x: {
-        //   min: -10,
-        //   max: 100
-        // },
-        // y: {
-        //   min: -10,
-        //   max: 100
-        // }
       }
-      // scales: {
-      //   y: {
-      //     suggestedMin: 0,
-      //     suggestedMax: 10
-      //   }
-      // },
-      // layout: {
-      //   padding: {
-      //     left: 50
-      //   }
-      // }
     }
   };
 }
@@ -246,7 +227,14 @@ onMounted(() => {
 
 <template>
   <div class="container" style="position: relative; height: 90vh; width: 90vw">
-    <h3 class="box title1">ATOM Client Outcomes for : {{ SLK }}</h3>
+    <div class="box title1">
+      <img src="../assets/ATOMLogo.png" alt="ATOM Logo" />
+      &nbsp;&nbsp;
+
+      <h3>Client Outcomes for : {{ SLK }}</h3>
+      &nbsp;&nbsp;
+      <img src="../assets/DirectionsLogoFull.png" alt="Directions Logo" />
+    </div>
     <div class="box s1-a">
       <LineChart :chart-data="PDCUseData" :chart-title="PDCDaysTitle" />
     </div>
