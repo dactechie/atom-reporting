@@ -4,8 +4,8 @@ function sortByAssessmentDate(surveyDataObject) {
   const result = surveyDataObject.sort((a, b) => {
     let aDate = new Date(Date.parse(a["AssessmentDate"]));
     let bDate = new Date(Date.parse(b["AssessmentDate"]));
-    if (aDate > bDate) return -1;
-    if (aDate < bDate) return 1;
+    if (aDate > bDate) return 1;
+    if (aDate < bDate) return -1;
     return 0;
   });
   return result;

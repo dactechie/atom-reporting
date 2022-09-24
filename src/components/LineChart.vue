@@ -32,6 +32,7 @@ const chartData1 = ref({});
 onMounted(() => {
   chartOptions.value = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -45,7 +46,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <Line :chart-options="chartOptions" :chart-data="chartData1" />
+  <Line
+    :chart-options="chartOptions"
+    :chart-data="chartData1"
+    style="width: 100%; height: 80%"
+  />
   <!-- <Line
     :chart-options="chartOptions"
     :chart-data="chartData"

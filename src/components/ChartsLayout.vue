@@ -1,10 +1,11 @@
 <script setup>
-import { isIntegerKey } from "@vue/shared";
+// import { isIntegerKey } from "@vue/shared";
 import { ref, onBeforeMount, onMounted } from "vue";
 import LineChart from "./LineChart.vue";
 
 const props = defineProps({
-  userATOMs: Array
+  userATOMs: Array,
+  SLK: String
   // ,chartTitle: String
 });
 
@@ -13,7 +14,7 @@ const sdsData = ref({});
 const PDCUseData = ref({});
 const sdsTitle = ref("");
 
-const PDCDaysTitle = ref("");
+const PDCDaysTitle = ref("Primary Subtance of concern");
 const ready = ref(false);
 
 const phyMentQoL = ref({});
@@ -92,7 +93,10 @@ const dataKey_labels = {
   Past4WkDifficultyFindingHousing: {
     label: "Housing",
     backgroundColor: "#3A4579",
-    borderColor: "rgb(25, 125, 75)"
+    borderColor: "rgb(25, 125, 75)",
+    pointRadius: 5,
+    pointBorderColor: "white",
+    pointBorderWidth: 1
   }
 };
 const otherOptions = {
@@ -149,7 +153,33 @@ function setupGenericMulti(chartVariable, dataKeys, xaxis) {
 
   chartVariable.value = {
     labels: xaxis,
-    datasets: datasets
+    datasets: datasets,
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        offset: true
+        // x: {
+        //   min: -10,
+        //   max: 100
+        // },
+        // y: {
+        //   min: -10,
+        //   max: 100
+        // }
+      }
+      // scales: {
+      //   y: {
+      //     suggestedMin: 0,
+      //     suggestedMax: 10
+      //   }
+      // },
+      // layout: {
+      //   padding: {
+      //     left: 50
+      //   }
+      // }
+    }
   };
 }
 
@@ -166,7 +196,9 @@ function setupGeneric(variable, dataKey, xaxis) {
 
 onBeforeMount(() => {
   if (props.userATOMs === undefined || props.userATOMs.length <= 0) return;
-  const assessmentDates = props.userATOMs.map(a => a.AssessmentDate);
+  const assessmentDates = props.userATOMs.map(a =>
+    a["AssessmentDate"].substr(0, 7)
+  );
   // setupSDS(assessmentDates);
   setupGenericMulti(
     phyMentQoL,
@@ -198,7 +230,7 @@ onBeforeMount(() => {
   );
 
   setupGeneric(sdsData, "SDS_Score", assessmentDates);
-  sdsTitle.value = "SDS Title";
+  sdsTitle.value = "Severity of Dependence";
   // setupGeneric(QOLData, "Past4WkQualityOfLifeScore", assessmentDates);
   // QOLTitle.value = "Quality of Life";
   // setupGeneric(PDCDaysData, "PDCDaysInLast28", assessmentDates);
@@ -209,63 +241,126 @@ onMounted(() => {
 });
 
 // https://grid.layoutit.com/
+// https://medium.com/@nikkipantony/multi-grid-one-page-layout-css-grid-6efefd537404
 </script>
 
 <template>
-  <div v-if="ready" class="container">
-    <div class="Title">Client Outcomes over time</div>
-    <div class="r1c1">
-      <LineChart :chart-data="PDCUseData" :chart-title="sdsTitle" />
-      <!-- <LineChart :chart-data="probs" :chart-title="probsTitle" /> -->
-      <!-- <LineChart :chart-data="sdsData" :chart-title="sdsTitle" /> -->
+  <div class="container" style="position: relative; height: 90vh; width: 90vw">
+    <h3 class="box title1">ATOM Client Outcomes for : {{ SLK }}</h3>
+    <div class="box s1-a">
+      <LineChart :chart-data="PDCUseData" :chart-title="PDCDaysTitle" />
     </div>
-    <div class="r1c2">
+    <div class="box s1-b">
       <LineChart :chart-data="phyMentQoL" :chart-title="phyMentQoLTitle" />
     </div>
-
-    <div class="r2c1">
+    <div class="box s1-d"></div>
+    <div class="box s1-c">
       <LineChart :chart-data="sdsData" :chart-title="sdsTitle" />
     </div>
-    <div class="r2c2">
+
+    <div class="box s1-e">
       <LineChart :chart-data="probs" :chart-title="probsTitle" />
     </div>
   </div>
 </template>
 
 <style>
+/* section#section-one {
+  background: rgba(165, 112, 33, 0.8);
+} */
 .container {
-  position: relative;
-  height: 40vh;
-  width: 80vw;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 0.2fr 1fr 1.6fr;
-  gap: 6px 6px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "Title Title"
-    "r1c1 r1c2"
-    "r2c1 r2c2"
-    ". .";
+  grid-template-columns: 4fr 1fr 4fr;
+  grid-template-rows: 0.5fr 2fr 2fr 2fr 2fr;
+  margin: 1em;
+  grid-gap: 1em;
+  /* width: 150%;
+  height: 150%; */
+}
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgb(252, 254, 252);
 }
 
-.Title {
-  grid-area: Title;
+.title1 {
+  grid-column: 1 / span 4;
+  grid-row: 1 / span 1;
 }
 
-.r1c1 {
-  grid-area: r1c1;
+.s1-a {
+  grid-column: 1 / span 1;
+  grid-row: 2 / span 2;
+}
+.s1-b {
+  grid-column: 2 / span 2;
+  grid-row: 2 / span 2;
+}
+.s1-c {
+  grid-column: 1 / span 1;
+  grid-row: 4 / span 2;
 }
 
-.r1c2 {
-  grid-area: r1c2;
+.s1-e {
+  grid-column: 2 / span 2;
+  grid-row: 4 / span 2;
 }
 
-.r2c1 {
-  grid-area: r2c1;
-}
+@media print {
+  .container {
+    display: grid;
+    grid-template-columns: 8fr;
+    grid-template-rows: 0.5fr 2fr 2fr 0.6fr 2fr 2fr;
+    margin: 0.5em;
+    grid-gap: 0.5em;
+    /* width: 150%;
+  height: 150%; */
+  }
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-.r2c2 {
-  grid-area: r2c2;
+    background-color: rgb(252, 254, 252);
+  }
+
+  .title1 {
+    grid-column: 1 / span 4;
+    grid-row: 1 / span 1;
+  }
+
+  .s1-a {
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 1;
+    height: 60%;
+    width: 60%;
+  }
+  .s1-b {
+    grid-column: 1 / span 1;
+    grid-row: 3 / span 1;
+    height: 60%;
+    width: 60%;
+  }
+  .s1-d {
+    grid-column: 1 / span 1;
+    grid-row: 4 / span 1;
+    height: 60%;
+    width: 60%;
+  }
+  .s1-c {
+    grid-column: 1 / span 1;
+    grid-row: 5 / span 1;
+    height: 60%;
+    width: 60%;
+  }
+
+  .s1-e {
+    grid-column: 1 / span 1;
+    grid-row: 6 / span 1;
+    height: 60%;
+    width: 60%;
+  }
 }
 </style>

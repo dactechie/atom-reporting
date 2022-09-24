@@ -53,10 +53,10 @@ onBeforeMount(async () => {
 
 <template>
   <!-- <Suspense> -->
-  <div v-if="userATOMs.length > 0">
+  <div id="charts" v-if="userATOMs.length > 0">
     <!-- <BarChart /> -->
 
-    <ChartsLayout :key="componentKey" :userATOMs="userATOMs" />
+    <ChartsLayout :key="componentKey" :userATOMs="userATOMs" :SLK="SLK" />
 
     <!-- <HelloWorld :userATOMs="userATOMs" :SLK="SLK" /> -->
   </div>
@@ -64,6 +64,27 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped>
+#charts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #charts,
+  #charts * {
+    visibility: visible;
+  }
+  #charts {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80%;
+  }
+}
 /* .logo {
   height: 6em;
   padding: 1.5em;
