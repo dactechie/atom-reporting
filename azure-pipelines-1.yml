@@ -17,7 +17,22 @@ jobs:
     displayName: npm install
     inputs:
       verbose: false
-
+  - task: DownloadSecureFile@1
+    name: downloadMySecureFile
+    displayName: downloadMySecureFile
+    inputs:
+      secureFile: 87172376-fb85-4803-8be0-68d0afa8f052
+  - task: CopyFiles@2
+    displayName: 'Copy .Env File to: Default Working Directory'
+    inputs:
+      SourceFolder: $(Agent.TempDirectory)
+      Contents: .env.reporting.production
+      TargetFolder: $(System.DefaultWorkingDirectory)
+  - task: Bash@3
+    displayName: Bash Script
+    inputs:
+      filePath: rename.sh
+      arguments: $(System.DefaultWorkingDirectory)/.env.reporting.production $(System.DefaultWorkingDirectory)/.env
   - task: Npm@1
     displayName: npm run build
     inputs:
