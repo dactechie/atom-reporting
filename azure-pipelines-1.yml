@@ -21,7 +21,7 @@ jobs:
     name: downloadMySecureFile
     displayName: downloadMySecureFile
     inputs:
-      secureFile: 87172376-fb85-4803-8be0-68d0afa8f052
+      secureFile: a409cbda-a547-4585-92e8-f3e77b76fe1a
   - task: CopyFiles@2
     displayName: 'Copy .Env File to: Default Working Directory'
     inputs:
