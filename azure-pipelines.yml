@@ -12,13 +12,23 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'    
+    versionSpec: '18.9.1'
   displayName: 'Install Node.js'
 
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
 
-- task: Bash@3
+- task: CopyFiles@2
+  displayName: 'Copy npm-built Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    targetType: 'inline'
-    script: 'npm install && npm run build'
-    workingDirectory: 'client-reports'
+    SourceFolder: dist
+    TargetFolder: $(Build.ArtifactStagingDirectory)
+    CleanTargetFolder: true
+    OverWrite: true
 
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts: drop'
+  inputs:
+    TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
