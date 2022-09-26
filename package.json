@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "chart.js": "^3.9.1",
+    "paper-css": "^0.4.1",
     "vue": "^3.2.37",
     "vue-chartjs": "^4.1.1"
   },

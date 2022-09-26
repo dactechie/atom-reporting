@@ -46,12 +46,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <Line
-    :chart-options="chartOptions"
-    :chart-data="chartData1"
-    style="width: 100%; height: 80%"
-  />
-  <!-- <Line
+  <Line class="item" :chart-options="chartOptions" :chart-data="chartData1" />
+  <!-- 
+        style="width: 100%; height: 80%"
+    <Line
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
@@ -63,3 +61,14 @@ onMounted(() => {
     :height="height"
   /> -->
 </template>
+<style>
+.item {
+  background-color: #ffffff;
+  /* border: 2px solid rgb(123, 210, 132); */
+  /* border-color: aquamarine; */
+  /* padding: 10px; */
+  /* font-size: 30px; */
+  border: 1px solid rgb(216, 216, 216);
+  text-align: center;
+}
+</style>

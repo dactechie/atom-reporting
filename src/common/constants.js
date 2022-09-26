@@ -16,31 +16,8 @@ export const MODE_CLIENT_DATA_SET = 1; // show client survey history
 
 export const DB_ENTITY_NAME = "COMS";
 
-export const SLK_LENGTH = 14;
-
 export const MILLIS_IN_DAY = 86_400_000; // 24 * 60 * 60 * 1000
 export const MILLIS_IN_YEAR = 31_536_000_000; // 365 * MILLIS_IN_DAY
-
-export const SURVEY_TYPE_MAP = {
-  // Survey title : RowKey code
-  InitialAssessment: "INAS",
-  ITSPReview: "ITSP",
-  ArcadiaITSPReview: "ITSP",
-  SupplementaryIntakeAssessment: "SITK",
-  PostTreatmentAssessment: "POTA",
-  PsyReview: "ITSP",
-  PsyEnd: "PYND"
-};
-
-//mapping of SurveyJS.io survey title to Launch-Button display name
-export const SURVEY_DISPLAY_NAMES = {
-  "ATOM Initial Assessment": "’New Episode’ assessment",
-  "ATOM ITSP Review Assessment": "ITSP review",
-  "Arcadia House Assessments": "Arcadia House Assessments",
-  "ATOM Psych Assessment": "Psych Program Assessments"
-};
-
-export const ARCA = "Arcadia";
 
 export const DB_META_KEYS = [
   PARTITION_KEY,

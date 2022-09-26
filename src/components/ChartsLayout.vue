@@ -10,9 +10,11 @@ const props = defineProps({
 });
 
 const sdsData = ref({});
+const k10Data = ref({});
 
 const PDCUseData = ref({});
 const sdsTitle = ref("");
+const k10Title = ref("Kessler-10 Scores");
 
 const PDCDaysTitle = ref("Primary Subtance of concern");
 const ready = ref(false);
@@ -45,6 +47,10 @@ const valueFuncs = {
 const dataKey_labels = {
   SDS_Score: {
     label: "SDS",
+    backgroundColor: "#f87979"
+  },
+  K10_Score: {
+    label: "K10",
     backgroundColor: "#f87979"
   },
   Past4WkQualityOfLifeScore: {
@@ -212,6 +218,8 @@ onBeforeMount(() => {
 
   setupGeneric(sdsData, "SDS_Score", assessmentDates);
   sdsTitle.value = "Severity of Dependence";
+
+  setupGeneric(k10Data, "K10_Score", assessmentDates);
   // setupGeneric(QOLData, "Past4WkQualityOfLifeScore", assessmentDates);
   // QOLTitle.value = "Quality of Life";
   // setupGeneric(PDCDaysData, "PDCDaysInLast28", assessmentDates);
@@ -226,129 +234,95 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container" style="position: relative; height: 90vh; width: 90vw">
-    <div class="box title1">
-      <img src="../assets/ATOMLogo.png" alt="ATOM Logo" />
-      &nbsp;&nbsp;
+  <!-- style="position: relative; height: 90vh; width: 90vw" -->
 
-      <h3>Client Outcomes for : {{ SLK }}</h3>
-      &nbsp;&nbsp;
-      <img src="../assets/DirectionsLogoFull.png" alt="Directions Logo" />
+  <div class="container">
+    <div class="LeftArea">
+      <div class="LeftTop">
+        <LineChart :chart-data="PDCUseData" :chart-title="PDCDaysTitle" />
+      </div>
+      <div class="LeftBottom">
+        <div class="LBt1">
+          <LineChart :chart-data="sdsData" :chart-title="sdsTitle" />
+        </div>
+        <div class="LBt2">
+          <LineChart
+            v-if="k10Data"
+            :chart-data="k10Data"
+            :chart-title="k10Title"
+          />
+        </div>
+        <!-- <div class="LBt3">
+          <LineChart :chart-data="PDCUseData" :chart-title="PDCDaysTitle" />
+        </div> -->
+      </div>
     </div>
-    <div class="box s1-a">
-      <LineChart :chart-data="PDCUseData" :chart-title="PDCDaysTitle" />
-    </div>
-    <div class="box s1-b">
-      <LineChart :chart-data="phyMentQoL" :chart-title="phyMentQoLTitle" />
-    </div>
-    <div class="box s1-d"></div>
-    <div class="box s1-c">
-      <LineChart :chart-data="sdsData" :chart-title="sdsTitle" />
-    </div>
+    <div class="RightArea">
+      <div class="RightTop">
+        <LineChart :chart-data="phyMentQoL" :chart-title="phyMentQoLTitle" />
+      </div>
 
-    <div class="box s1-e">
-      <LineChart :chart-data="probs" :chart-title="probsTitle" />
+      <div class="RightBottom">
+        <LineChart :chart-data="probs" :chart-title="probsTitle" />
+      </div>
     </div>
   </div>
 </template>
 
 <style>
-/* section#section-one {
-  background: rgba(165, 112, 33, 0.8);
-} */
 .container {
   display: grid;
-  grid-template-columns: 4fr 1fr 4fr;
-  grid-template-rows: 0.5fr 2fr 2fr 2fr 2fr;
-  margin: 1em;
-  grid-gap: 1em;
-  /* width: 150%;
-  height: 150%; */
-}
-.box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: rgb(252, 254, 252);
+  grid-template-columns: 1.4fr 0.9fr 0.7fr;
+  grid-template-rows: 1fr 0.5fr 1.5fr;
+  gap: 4px 4px;
+  /* grid-auto-flow: row; */
+  /* background-color: #ffffff; */
 }
 
-.title1 {
-  grid-column: 1 / span 4;
-  grid-row: 1 / span 1;
+.LeftArea {
+  grid-area: 1 / 1 / 4 / 2;
 }
 
-.s1-a {
-  grid-column: 1 / span 1;
-  grid-row: 2 / span 2;
-}
-.s1-b {
-  grid-column: 2 / span 2;
-  grid-row: 2 / span 2;
-}
-.s1-c {
-  grid-column: 1 / span 1;
-  grid-row: 4 / span 2;
+.RightArea {
+  grid-area: 1 / 2 / 4 / 4;
 }
 
-.s1-e {
-  grid-column: 2 / span 2;
-  grid-row: 4 / span 2;
+.RightTop {
+  grid-area: 1 / 2 / 3 / 4;
 }
 
-@media print {
-  .container {
-    display: grid;
-    grid-template-columns: 8fr;
-    grid-template-rows: 0.5fr 2fr 2fr 0.6fr 2fr 2fr;
-    margin: 0.5em;
-    grid-gap: 0.5em;
-    /* width: 150%;
-  height: 150%; */
-  }
-  .box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.RightBottom {
+  grid-area: 3 / 2 / 4 / 4;
+}
 
-    background-color: rgb(252, 254, 252);
-  }
+.LeftTop {
+  grid-area: 1 / 1 / 2 / 2;
+  align-items: end;
+  align-content: end;
+}
 
-  .title1 {
-    grid-column: 1 / span 4;
-    grid-row: 1 / span 1;
-  }
+.LeftBottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  /* grid-auto-flow: row; */
+  grid-template-areas:
+    "LBt1 LBt1 LBt1"
+    "LBt2 LBt2 LBt2"
+    "LBt3 LBt3 LBt3";
+  grid-area: 2 / 1 / 4 / 2;
+}
 
-  .s1-a {
-    grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
-    height: 60%;
-    width: 60%;
-  }
-  .s1-b {
-    grid-column: 1 / span 1;
-    grid-row: 3 / span 1;
-    height: 60%;
-    width: 60%;
-  }
-  .s1-d {
-    grid-column: 1 / span 1;
-    grid-row: 4 / span 1;
-    height: 60%;
-    width: 60%;
-  }
-  .s1-c {
-    grid-column: 1 / span 1;
-    grid-row: 5 / span 1;
-    height: 60%;
-    width: 60%;
-  }
+.LBt1 {
+  grid-area: LBt1;
+}
 
-  .s1-e {
-    grid-column: 1 / span 1;
-    grid-row: 6 / span 1;
-    height: 60%;
-    width: 60%;
-  }
+.LBt2 {
+  grid-area: LBt2;
+}
+
+.LBt3 {
+  grid-area: LBt3;
 }
 </style>
