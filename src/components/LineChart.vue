@@ -23,23 +23,34 @@ ChartJS.register(
 );
 const props = defineProps({
   chartTitle: String,
-  chartData: Object
+  chartData: Object,
+  chartOpts: Object
 });
 // const { chartTitle, chartData } = toRefs(props);
 const chartOptions = ref({});
 const chartData1 = ref({});
 
 onMounted(() => {
-  chartOptions.value = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      title: {
-        display: true,
-        text: props.chartTitle
+  chartOptions.value = Object.assign(
+    {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: true,
+          text: props.chartTitle
+        },
+        zoom: {
+          zoom: {
+            wheel: {
+              enabled: true
+            }
+          }
+        }
       }
-    }
-  };
+    },
+    props.chartOpts
+  );
   chartData1.value = props.chartData;
 });
 // };

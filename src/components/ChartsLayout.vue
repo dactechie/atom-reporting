@@ -1,12 +1,10 @@
 <script setup>
-// import { isIntegerKey } from "@vue/shared";
 import { ref, onBeforeMount, onMounted } from "vue";
 import LineChart from "./LineChart.vue";
 
 const props = defineProps({
   userATOMs: Array,
   SLK: String
-  // ,chartTitle: String
 });
 
 const sdsData = ref({});
@@ -16,12 +14,23 @@ const PDCUseData = ref({});
 const sdsTitle = ref("");
 const k10Title = ref("Kessler-10 Scores");
 
-const PDCDaysTitle = ref("Primary Subtance of concern");
+const PDCDaysTitle = ref("Primary Substance of concern");
 const ready = ref(false);
 
 const phyMentQoL = ref({});
 const phyMentQoLTitle = "Physical Health, Mental Health & Quality of Life";
 
+const sdsOpts = ref({});
+const DrugUseOpts = ref({});
+const phyMentQoLOpts = ref({
+  scales: {
+    y: {
+      min: 0,
+      max: 10
+    }
+  }
+});
+const probsOpts = ref({});
 const probs = ref({});
 const probsTitle = "Problems in Daily Life";
 
@@ -31,8 +40,8 @@ const mapOfRatings = {
   "Less than weekly": 1,
   "Once or twice per week": 2,
   "Not at all": 0
-  // undefined: undefined
 };
+
 const valueMappings = {
   Past4WkHowOftenPhysicalHealthCausedProblems: mapOfRatings,
   Past4WkHowOftenMentalHealthCausedProblems: mapOfRatings,
@@ -105,6 +114,7 @@ const dataKey_labels = {
     pointBorderWidth: 1
   }
 };
+
 const otherOptions = {
   tension: 0.2
 };
@@ -114,7 +124,21 @@ function getNumericArrayForField(field, mappingDict, mappingFunc) {
     return props.userATOMs.map(a => mappingDict[a[field]]);
   else if (mappingFunc !== undefined)
     return props.userATOMs.map(a => mappingFunc(a[field]));
+
   return props.userATOMs.map(a => a[field]);
+}
+
+function extendYscale(fieldName) {
+  const numericList = props.userATOMs.map(a => a[fieldName]).filter(a => a);
+
+  return {
+    scales: {
+      y: {
+        min: Math.min(...numericList) - 2,
+        max: Math.max(...numericList) + 2
+      }
+    }
+  };
 }
 
 function getAvg(rangeString) {
@@ -130,34 +154,25 @@ function getAvg(rangeString) {
   );
 }
 
-function setupGenericMulti(chartVariable, dataKeys, xaxis) {
+function setupGenericMulti(dataKeys, xaxis) {
   const datasets = [];
 
   dataKeys.forEach(k => {
     const dataConfig = dataKey_labels[k];
     const valueMapping = valueMappings[k];
     const valueFunc = valueFuncs[k];
-    // if (valueMapping !== undefined)
+
     datasets.push(
       Object.assign(
-        // { data: props.userATOMs.map(a => valueMapping[a[k]]) },
         { data: getNumericArrayForField(k, valueMapping, valueFunc) },
         dataConfig,
         otherOptions
       )
     );
-    // else
-    //   datasets.push(
-    //     Object.assign(
-    //       { data: props.userATOMs.map(a => a[k]) },
-    //       dataConfig,
-    //       otherOptions
-    //     )
-    //   );
     console.log(`Data Key ${k}, dataset:`, datasets);
   });
 
-  chartVariable.value = {
+  return {
     labels: xaxis,
     datasets: datasets,
     options: {
@@ -170,10 +185,10 @@ function setupGenericMulti(chartVariable, dataKeys, xaxis) {
   };
 }
 
-function setupGeneric(variable, dataKey, xaxis) {
+function setupGeneric(dataKey, xaxis) {
   const dataConfig = dataKey_labels[dataKey];
 
-  variable.value = {
+  return {
     labels: xaxis,
     datasets: [
       Object.assign({ data: props.userATOMs.map(a => a[dataKey]) }, dataConfig)
@@ -187,8 +202,7 @@ onBeforeMount(() => {
     a["AssessmentDate"].substr(0, 7)
   );
   // setupSDS(assessmentDates);
-  setupGenericMulti(
-    phyMentQoL,
+  phyMentQoL.value = setupGenericMulti(
     [
       "Past4WkPhysicalHealth",
       "Past4WkMentalHealth",
@@ -197,33 +211,46 @@ onBeforeMount(() => {
     assessmentDates
   );
 
-  setupGenericMulti(
-    probs,
-    [
-      "Past4WkHowOftenPhysicalHealthCausedProblems",
-      "Past4WkHowOftenMentalHealthCausedProblems",
-      "Past4WkUseLedToProblemsWithFamilyFriend",
-      "Past4WkDailyLivingImpacted",
-      "Past4WkDifficultyFindingHousing"
-      // illegal activities
-    ],
-    assessmentDates
-  );
+  const probsFields = [
+    "Past4WkHowOftenPhysicalHealthCausedProblems",
+    "Past4WkHowOftenMentalHealthCausedProblems",
+    "Past4WkUseLedToProblemsWithFamilyFriend",
+    "Past4WkDailyLivingImpacted",
+    "Past4WkDifficultyFindingHousing"
+    // illegal activities
+  ];
+  probs.value = setupGenericMulti(probsFields, assessmentDates);
+  let maxVal = 0,
+    minVal = 50;
 
-  setupGenericMulti(
-    PDCUseData,
+  Array.from(probs.value["datasets"]).forEach(e => {
+    const noUndefs = e.data.filter(a => a);
+    const max = Math.max(...noUndefs);
+    if (maxVal < max) maxVal = max;
+    const min = Math.min(...noUndefs);
+    if (minVal > min) minVal = min;
+  });
+
+  probsOpts.value = {
+    scales: {
+      y: {
+        min: minVal - 2,
+        max: maxVal + 2
+      }
+    }
+  };
+
+  PDCUseData.value = setupGenericMulti(
     ["PDCHowMuchPerOccassion", "PDCDaysInLast28"],
     assessmentDates
   );
+  DrugUseOpts.value = extendYscale("PDCDaysInLast28");
 
-  setupGeneric(sdsData, "SDS_Score", assessmentDates);
+  sdsData.value = setupGeneric("SDS_Score", assessmentDates);
+  sdsOpts.value = extendYscale("SDS_Score");
+
   sdsTitle.value = "Severity of Dependence";
-
-  setupGeneric(k10Data, "K10_Score", assessmentDates);
-  // setupGeneric(QOLData, "Past4WkQualityOfLifeScore", assessmentDates);
-  // QOLTitle.value = "Quality of Life";
-  // setupGeneric(PDCDaysData, "PDCDaysInLast28", assessmentDates);
-  // PDCDaysTitle.value = "PDC Num. Days used in last 28";
+  k10Data.value = setupGeneric("K10_Score", assessmentDates);
 });
 onMounted(() => {
   ready.value = true;
@@ -239,11 +266,19 @@ onMounted(() => {
   <div class="container">
     <div class="LeftArea">
       <div class="LeftTop">
-        <LineChart :chart-data="PDCUseData" :chart-title="PDCDaysTitle" />
+        <LineChart
+          :chart-data="PDCUseData"
+          :chart-title="PDCDaysTitle"
+          :chart-opts="DrugUseOpts"
+        />
       </div>
       <div class="LeftBottom">
         <div class="LBt1">
-          <LineChart :chart-data="sdsData" :chart-title="sdsTitle" />
+          <LineChart
+            :chart-data="sdsData"
+            :chart-title="sdsTitle"
+            :chart-opts="sdsOpts"
+          />
         </div>
         <div class="LBt2">
           <LineChart
@@ -259,11 +294,19 @@ onMounted(() => {
     </div>
     <div class="RightArea">
       <div class="RightTop">
-        <LineChart :chart-data="phyMentQoL" :chart-title="phyMentQoLTitle" />
+        <LineChart
+          :chart-data="phyMentQoL"
+          :chart-title="phyMentQoLTitle"
+          :chart-opts="phyMentQoLOpts"
+        />
       </div>
 
       <div class="RightBottom">
-        <LineChart :chart-data="probs" :chart-title="probsTitle" />
+        <LineChart
+          :chart-data="probs"
+          :chart-title="probsTitle"
+          :chart-opts="probsOpts"
+        />
       </div>
     </div>
   </div>
