@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onBeforeMount, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { getRangeAvg, color, months } from "../common/utils";
 import LineChart from "./LineChart.vue";
 
 const props = defineProps({
@@ -11,11 +12,11 @@ const sdsData = ref({});
 const k10Data = ref({});
 
 const PDCUseData = ref({});
-const sdsTitle = ref("");
+const sdsTitle = ref("Severity of Dependence");
 const k10Title = ref("Kessler-10 Scores");
 
 const PDCDaysTitle = ref("Primary Substance of concern");
-const ready = ref(false);
+// const ready = ref(false);
 
 const phyMentQoL = ref({});
 const phyMentQoLTitle = "Physical Health, Mental Health & Quality of Life";
@@ -50,13 +51,20 @@ const valueMappings = {
   Past4WkDifficultyFindingHousing: mapOfRatings
 };
 const valueFuncs = {
-  PDCHowMuchPerOccassion: getAvg
+  PDCHowMuchPerOccassion: getRangeAvg
 };
+
+function pointBackgroundColor(ctx) {
+  // return Utils.color(ctx.datasetIndex);
+  const v = Math.round(ctx.parsed.y / 5);
+  // console.log("color index " + ctx.parsed.y + "v " + v + " " + color(v));
+  return color(v);
+}
 
 const dataKey_labels = {
   SDS_Score: {
-    label: "SDS",
-    backgroundColor: "#f87979"
+    label: "SDS"
+    // backgroundColor: "#f87979"
   },
   K10_Score: {
     label: "K10",
@@ -141,19 +149,6 @@ function extendYscale(fieldName) {
   };
 }
 
-function getAvg(rangeString) {
-  if (rangeString === undefined) return undefined;
-
-  if (!rangeString.includes("-")) return parseInt(rangeString);
-
-  return (
-    rangeString
-      .split("-")
-      .map(e => parseInt(e))
-      .reduce((a, b) => a + b, 0) / 2
-  );
-}
-
 function setupGenericMulti(dataKeys, xaxis) {
   const datasets = [];
 
@@ -198,8 +193,11 @@ function setupGeneric(dataKey, xaxis) {
 
 onBeforeMount(() => {
   if (props.userATOMs === undefined || props.userATOMs.length <= 0) return;
-  const assessmentDates = props.userATOMs.map(a =>
-    a["AssessmentDate"].substr(0, 7)
+  const assessmentDates = props.userATOMs.map(
+    a =>
+      `'${a["AssessmentDate"].substr(2, 2)}-${
+        months[parseInt(a["AssessmentDate"].substr(5, 2))]
+      }`
   );
   // setupSDS(assessmentDates);
   phyMentQoL.value = setupGenericMulti(
@@ -246,23 +244,27 @@ onBeforeMount(() => {
   );
   DrugUseOpts.value = extendYscale("PDCDaysInLast28");
 
+  const severityColorOpts = {
+    elements: {
+      point: {
+        backgroundColor: pointBackgroundColor
+      }
+    }
+  };
   sdsData.value = setupGeneric("SDS_Score", assessmentDates);
-  sdsOpts.value = extendYscale("SDS_Score");
+  sdsOpts.value = Object.assign(extendYscale("SDS_Score"), severityColorOpts);
 
-  sdsTitle.value = "Severity of Dependence";
   k10Data.value = setupGeneric("K10_Score", assessmentDates);
 });
-onMounted(() => {
-  ready.value = true;
-});
+// onMounted(() => {
+//   // ready.value = true;
+// });
 
 // https://grid.layoutit.com/
 // https://medium.com/@nikkipantony/multi-grid-one-page-layout-css-grid-6efefd537404
 </script>
 
 <template>
-  <!-- style="position: relative; height: 90vh; width: 90vw" -->
-
   <div class="container">
     <div class="LeftArea">
       <div class="LeftTop">
@@ -287,9 +289,6 @@ onMounted(() => {
             :chart-title="k10Title"
           />
         </div>
-        <!-- <div class="LBt3">
-          <LineChart :chart-data="PDCUseData" :chart-title="PDCDaysTitle" />
-        </div> -->
       </div>
     </div>
     <div class="RightArea">
@@ -300,7 +299,6 @@ onMounted(() => {
           :chart-opts="phyMentQoLOpts"
         />
       </div>
-
       <div class="RightBottom">
         <LineChart
           :chart-data="probs"

@@ -38,8 +38,15 @@ onMounted(() => {
       plugins: {
         title: {
           display: true,
-          text: props.chartTitle
+          text: props.chartTitle,
+          font: { weight: "bold", size: 14 }
         },
+        // legend: {
+        //   display: true,
+        //   labels: {
+        //     color: "rgb(255, 99, 132)"
+        //   }
+        // },
         zoom: {
           zoom: {
             wheel: {

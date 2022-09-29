@@ -15,3 +15,7 @@ https://dev.to/shashannkbawa/deploying-vite-app-to-github-pages-3ane
 
 DEPLOYED using Azure static site
 https://portal.azure.com/#@directionshealth.com/resource/subscriptions/e1a42143-a624-4e4e-809d-d1271b8b0d29/resourcegroups/ansa-winrg/providers/Microsoft.Web/staticSites/atom-client/staticsite
+
+
+TODO :
+https://jsbin.com/yiyejumaye/1/edit?html,js,output
