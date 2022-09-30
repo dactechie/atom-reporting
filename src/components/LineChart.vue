@@ -24,37 +24,53 @@ ChartJS.register(
 const props = defineProps({
   chartTitle: String,
   chartData: Object,
-  chartOpts: Object
+  chartOpts: Object,
+  chartPlugins: Object
 });
-// const { chartTitle, chartData } = toRefs(props);
+
 const chartOptions = ref({});
 const chartData1 = ref({});
 
 onMounted(() => {
+  const plugins = Object.assign(
+    {
+      title: {
+        display: true,
+        text: props.chartTitle,
+        font: { weight: "bold", size: 14 }
+      },
+      zoom: {
+        pan: {
+          enabled: true
+          // mode: "xy"
+        },
+        limits: {
+          y: { min: 0, max: 30 }
+        },
+        zoom: {
+          // mode: "xy",
+
+          wheel: {
+            enabled: true
+
+            // rangeMin: {
+            //   y: -2
+            // },
+            // rangeMax: {
+            //   y: 18
+            // }
+          }
+        }
+      }
+    },
+    props.chartPlugins
+  );
+
   chartOptions.value = Object.assign(
     {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: {
-        title: {
-          display: true,
-          text: props.chartTitle,
-          font: { weight: "bold", size: 14 }
-        },
-        // legend: {
-        //   display: true,
-        //   labels: {
-        //     color: "rgb(255, 99, 132)"
-        //   }
-        // },
-        zoom: {
-          zoom: {
-            wheel: {
-              enabled: true
-            }
-          }
-        }
-      }
+      plugins: plugins
     },
     props.chartOpts
   );

@@ -1,6 +1,11 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import { getRangeAvg, color, months } from "../common/utils";
+import {
+  getRangeAvg,
+  SDSColors,
+  monthNamesShort,
+  getMinMaxAcrossLists
+} from "../common/utils";
 import LineChart from "./LineChart.vue";
 
 const props = defineProps({
@@ -22,6 +27,7 @@ const phyMentQoL = ref({});
 const phyMentQoLTitle = "Physical Health, Mental Health & Quality of Life";
 
 const sdsOpts = ref({});
+const sdsPlugins = ref({});
 const DrugUseOpts = ref({});
 const phyMentQoLOpts = ref({
   scales: {
@@ -55,15 +61,19 @@ const valueFuncs = {
 };
 
 function pointBackgroundColor(ctx) {
-  // return Utils.color(ctx.datasetIndex);
-  const v = Math.round(ctx.parsed.y / 5);
-  // console.log("color index " + ctx.parsed.y + "v " + v + " " + color(v));
-  return color(v);
+  if (!ctx.parsed.y) return undefined;
+  const col = SDSColors(ctx.parsed.y);
+  // console.log("color  [y:" + ctx.parsed.y + "]  ;  color:" + col);
+  return col;
 }
 
 const dataKey_labels = {
   SDS_Score: {
-    label: "SDS"
+    label: "SDS",
+    pointRadius: 6,
+    pointBorderColor: "#999999",
+    pointBorderWidth: 3
+
     // backgroundColor: "#f87979"
   },
   K10_Score: {
@@ -196,7 +206,7 @@ onBeforeMount(() => {
   const assessmentDates = props.userATOMs.map(
     a =>
       `'${a["AssessmentDate"].substr(2, 2)}-${
-        months[parseInt(a["AssessmentDate"].substr(5, 2))]
+        monthNamesShort[parseInt(a["AssessmentDate"].substr(5, 2))]
       }`
   );
   // setupSDS(assessmentDates);
@@ -218,16 +228,9 @@ onBeforeMount(() => {
     // illegal activities
   ];
   probs.value = setupGenericMulti(probsFields, assessmentDates);
-  let maxVal = 0,
-    minVal = 50;
-
-  Array.from(probs.value["datasets"]).forEach(e => {
-    const noUndefs = e.data.filter(a => a);
-    const max = Math.max(...noUndefs);
-    if (maxVal < max) maxVal = max;
-    const min = Math.min(...noUndefs);
-    if (minVal > min) minVal = min;
-  });
+  const { maxVal, minVal } = getMinMaxAcrossLists(
+    Array.from(probs.value["datasets"])
+  );
 
   probsOpts.value = {
     scales: {
@@ -248,6 +251,89 @@ onBeforeMount(() => {
     elements: {
       point: {
         backgroundColor: pointBackgroundColor
+      }
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: 15
+      }
+    },
+    pan: {
+      rangeMax: {
+        y: 18
+      }
+    }
+  };
+  sdsPlugins.value = {
+    annotation: {
+      annotations: {
+        line1: {
+          type: "line",
+
+          yMin: 10,
+          yMax: 10,
+          borderColor: "rgb(255, 99, 132)",
+          borderWidth: 2
+        },
+
+        severeBox: {
+          type: "box",
+          label: {
+            display: true,
+            content: "Severe"
+          },
+          yMin: 12.9,
+          yMax: 15,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderWidth: 0
+        },
+        substantialBox: {
+          type: "box",
+          label: {
+            display: true,
+            content: "substantial"
+          },
+          yMin: 9.9,
+          yMax: 12.9,
+          backgroundColor: "rgba(245, 158, 7, 0.2)",
+          borderWidth: 0
+        },
+        moderateBox: {
+          type: "box",
+          label: {
+            display: true,
+            content: "moderate"
+          },
+          yMin: 7,
+          yMax: 9.9,
+          backgroundColor: "rgba(235, 218, 33, 0.2)",
+          borderWidth: 0
+        },
+
+        mildBox: {
+          type: "box",
+          label: {
+            display: true,
+            content: "Mild"
+          },
+          yMin: 4,
+          yMax: 6.9,
+          backgroundColor: "rgba(124, 245, 95, 0.2)",
+          borderWidth: 0
+        },
+
+        nilBox: {
+          type: "box",
+          label: {
+            display: true,
+            content: "Negligible"
+          },
+          yMin: 3.9,
+          yMax: 0,
+          backgroundColor: "rgba(19, 245, 7, 0.2)",
+          borderWidth: 0
+        }
       }
     }
   };
@@ -280,6 +366,7 @@ onBeforeMount(() => {
             :chart-data="sdsData"
             :chart-title="sdsTitle"
             :chart-opts="sdsOpts"
+            :chart-plugins="sdsPlugins"
           />
         </div>
         <div class="LBt2">
