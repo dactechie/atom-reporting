@@ -2,32 +2,37 @@
 import { ref, onBeforeMount } from "vue";
 import {
   getRangeAvg,
-  SDSColors,
   monthNamesShort,
   getMinMaxAcrossLists
 } from "../common/utils";
+import { setUpCharts } from "../chart-helpers/data-formatter";
 import LineChart from "./LineChart.vue";
 
 const props = defineProps({
   userATOMs: Array,
   SLK: String
 });
+const otherOptions = {
+  tension: 0.2
+};
 
-const sdsData = ref({});
 const k10Data = ref({});
 
 const PDCUseData = ref({});
-const sdsTitle = ref("Severity of Dependence");
-const k10Title = ref("Kessler-10 Scores");
 
-const PDCDaysTitle = ref("Primary Substance of concern");
+let sds = ref({});
+// probs = ref({});
+
+const k10Title = "Kessler-10 Scores (🡻 = 👍)";
+
+// 👎 🡹
+const PDCDaysTitle = "Primary Substance of concern (🡻 = 👍)";
 // const ready = ref(false);
 
 const phyMentQoL = ref({});
-const phyMentQoLTitle = "Physical Health, Mental Health & Quality of Life";
+const phyMentQoLTitle =
+  "Physical Health, Mental Health & Quality of Life (🡹 = 👍)";
 
-const sdsOpts = ref({});
-const sdsPlugins = ref({});
 const DrugUseOpts = ref({});
 const phyMentQoLOpts = ref({
   scales: {
@@ -39,7 +44,7 @@ const phyMentQoLOpts = ref({
 });
 const probsOpts = ref({});
 const probs = ref({});
-const probsTitle = "Problems in Daily Life";
+const probsTitle = "Problems in Daily Life (🡻 = 👍)";
 
 const mapOfRatings = {
   "Daily or almost daily": 4,
@@ -60,22 +65,7 @@ const valueFuncs = {
   PDCHowMuchPerOccassion: getRangeAvg
 };
 
-function pointBackgroundColor(ctx) {
-  if (!ctx.parsed.y) return undefined;
-  const col = SDSColors(ctx.parsed.y);
-  // console.log("color  [y:" + ctx.parsed.y + "]  ;  color:" + col);
-  return col;
-}
-
 const dataKey_labels = {
-  SDS_Score: {
-    label: "SDS",
-    pointRadius: 6,
-    pointBorderColor: "#999999",
-    pointBorderWidth: 3
-
-    // backgroundColor: "#f87979"
-  },
   K10_Score: {
     label: "K10",
     backgroundColor: "#f87979"
@@ -133,21 +123,17 @@ const dataKey_labels = {
   }
 };
 
-const otherOptions = {
-  tension: 0.2
-};
-
-function getNumericArrayForField(field, mappingDict, mappingFunc) {
+function getNumericArrayForField(atomData, field, mappingDict, mappingFunc) {
   if (mappingDict !== undefined)
-    return props.userATOMs.map(a => mappingDict[a[field]]);
+    return atomData.map(a => mappingDict[a[field]]);
   else if (mappingFunc !== undefined)
-    return props.userATOMs.map(a => mappingFunc(a[field]));
+    return atomData.map(a => mappingFunc(a[field]));
 
-  return props.userATOMs.map(a => a[field]);
+  return atomData.map(a => a[field]);
 }
 
-function extendYscale(fieldName) {
-  const numericList = props.userATOMs.map(a => a[fieldName]).filter(a => a);
+function extendYscale(atomData, fieldName) {
+  const numericList = atomData.map(a => a[fieldName]).filter(a => a);
 
   return {
     scales: {
@@ -159,7 +145,7 @@ function extendYscale(fieldName) {
   };
 }
 
-function setupGenericMulti(dataKeys, xaxis) {
+function setupGenericMulti(atomData, dataKeys, xaxis) {
   const datasets = [];
 
   dataKeys.forEach(k => {
@@ -169,7 +155,7 @@ function setupGenericMulti(dataKeys, xaxis) {
 
     datasets.push(
       Object.assign(
-        { data: getNumericArrayForField(k, valueMapping, valueFunc) },
+        { data: getNumericArrayForField(atomData, k, valueMapping, valueFunc) },
         dataConfig,
         otherOptions
       )
@@ -190,20 +176,21 @@ function setupGenericMulti(dataKeys, xaxis) {
   };
 }
 
-function setupGeneric(dataKey, xaxis) {
+function setupGeneric(atomData, dataKey, xaxis) {
   const dataConfig = dataKey_labels[dataKey];
 
   return {
     labels: xaxis,
     datasets: [
-      Object.assign({ data: props.userATOMs.map(a => a[dataKey]) }, dataConfig)
+      Object.assign({ data: atomData.map(a => a[dataKey]) }, dataConfig)
     ]
   };
 }
 
 onBeforeMount(() => {
   if (props.userATOMs === undefined || props.userATOMs.length <= 0) return;
-  const assessmentDates = props.userATOMs.map(
+  const atomData = props.userATOMs;
+  const assessmentDates = atomData.map(
     a =>
       `'${a["AssessmentDate"].substr(2, 2)}-${
         monthNamesShort[parseInt(a["AssessmentDate"].substr(5, 2))]
@@ -211,6 +198,7 @@ onBeforeMount(() => {
   );
   // setupSDS(assessmentDates);
   phyMentQoL.value = setupGenericMulti(
+    atomData,
     [
       "Past4WkPhysicalHealth",
       "Past4WkMentalHealth",
@@ -227,7 +215,7 @@ onBeforeMount(() => {
     "Past4WkDifficultyFindingHousing"
     // illegal activities
   ];
-  probs.value = setupGenericMulti(probsFields, assessmentDates);
+  probs.value = setupGenericMulti(atomData, probsFields, assessmentDates);
   const { maxVal, minVal } = getMinMaxAcrossLists(
     Array.from(probs.value["datasets"])
   );
@@ -242,105 +230,17 @@ onBeforeMount(() => {
   };
 
   PDCUseData.value = setupGenericMulti(
+    atomData,
     ["PDCHowMuchPerOccassion", "PDCDaysInLast28"],
     assessmentDates
   );
-  DrugUseOpts.value = extendYscale("PDCDaysInLast28");
+  DrugUseOpts.value = extendYscale(atomData, "PDCDaysInLast28");
 
-  const severityColorOpts = {
-    elements: {
-      point: {
-        backgroundColor: pointBackgroundColor
-      }
-    },
-    scales: {
-      y: {
-        min: 0,
-        max: 15
-      }
-    },
-    pan: {
-      rangeMax: {
-        y: 18
-      }
-    }
-  };
-  sdsPlugins.value = {
-    annotation: {
-      annotations: {
-        line1: {
-          type: "line",
+  const results = setUpCharts(atomData, assessmentDates);
+  sds.value = results["sds"];
+  // probs.value = results["probs"];
 
-          yMin: 10,
-          yMax: 10,
-          borderColor: "rgb(255, 99, 132)",
-          borderWidth: 2
-        },
-
-        severeBox: {
-          type: "box",
-          label: {
-            display: true,
-            content: "Severe"
-          },
-          yMin: 12.9,
-          yMax: 15,
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderWidth: 0
-        },
-        substantialBox: {
-          type: "box",
-          label: {
-            display: true,
-            content: "substantial"
-          },
-          yMin: 9.9,
-          yMax: 12.9,
-          backgroundColor: "rgba(245, 158, 7, 0.2)",
-          borderWidth: 0
-        },
-        moderateBox: {
-          type: "box",
-          label: {
-            display: true,
-            content: "moderate"
-          },
-          yMin: 7,
-          yMax: 9.9,
-          backgroundColor: "rgba(235, 218, 33, 0.2)",
-          borderWidth: 0
-        },
-
-        mildBox: {
-          type: "box",
-          label: {
-            display: true,
-            content: "Mild"
-          },
-          yMin: 4,
-          yMax: 6.9,
-          backgroundColor: "rgba(124, 245, 95, 0.2)",
-          borderWidth: 0
-        },
-
-        nilBox: {
-          type: "box",
-          label: {
-            display: true,
-            content: "Negligible"
-          },
-          yMin: 3.9,
-          yMax: 0,
-          backgroundColor: "rgba(19, 245, 7, 0.2)",
-          borderWidth: 0
-        }
-      }
-    }
-  };
-  sdsData.value = setupGeneric("SDS_Score", assessmentDates);
-  sdsOpts.value = Object.assign(extendYscale("SDS_Score"), severityColorOpts);
-
-  k10Data.value = setupGeneric("K10_Score", assessmentDates);
+  k10Data.value = setupGeneric(atomData, "K10_Score", assessmentDates);
 });
 // onMounted(() => {
 //   // ready.value = true;
@@ -363,10 +263,10 @@ onBeforeMount(() => {
       <div class="LeftBottom">
         <div class="LBt1">
           <LineChart
-            :chart-data="sdsData"
-            :chart-title="sdsTitle"
-            :chart-opts="sdsOpts"
-            :chart-plugins="sdsPlugins"
+            :chart-data="sds.data"
+            :chart-title="sds.title"
+            :chart-opts="sds.options"
+            :chart-plugins="sds.plugins"
           />
         </div>
         <div class="LBt2">
@@ -387,6 +287,11 @@ onBeforeMount(() => {
         />
       </div>
       <div class="RightBottom">
+        <!-- <LineChart
+          :chart-data="probs.data"
+          :chart-title="probs.title"
+          :chart-opts="probs.options"
+        /> -->
         <LineChart
           :chart-data="probs"
           :chart-title="probsTitle"
