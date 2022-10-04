@@ -70,7 +70,25 @@ onMounted(() => {
     {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: plugins
+      plugins: plugins,
+      // scales: {
+      //   //https://stackoverflow.com/questions/70385227/chart-js-grid-lines-only-on-dataset-points
+      //   x: {
+      //     afterBuildTicks: axis =>
+      //       (axis.ticks = data.map(v => ({ value: v.x }))),
+      //     ticks: {
+      //       callback: v => v
+      //     }
+      //   },
+      //   y: {
+      //     afterBuildTicks: axis =>
+      //       (axis.ticks = data.map(v => ({ value: v.y })))
+      //   }
+      // },
+      interaction: {
+        intersect: false,
+        mode: "index"
+      }
     },
     props.chartOpts
   );

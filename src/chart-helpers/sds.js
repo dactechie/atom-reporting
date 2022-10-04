@@ -41,7 +41,7 @@ const plugins = {
 
         yMin: 10,
         yMax: 10,
-        borderColor: "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132, 0.35)",
         borderWidth: 2
       },
 
@@ -53,7 +53,7 @@ const plugins = {
         },
         yMin: 12.9,
         yMax: 15,
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        backgroundColor: "rgba(255, 99, 132, 0.15)",
         borderWidth: 0
       },
       substantialBox: {
@@ -64,7 +64,7 @@ const plugins = {
         },
         yMin: 9.9,
         yMax: 12.9,
-        backgroundColor: "rgba(245, 158, 7, 0.2)",
+        backgroundColor: "rgba(245, 158, 7, 0.15)",
         borderWidth: 0
       },
       moderateBox: {
@@ -75,7 +75,7 @@ const plugins = {
         },
         yMin: 7,
         yMax: 9.9,
-        backgroundColor: "rgba(235, 218, 33, 0.2)",
+        backgroundColor: "rgba(235, 218, 33, 0.15)",
         borderWidth: 0
       },
 
@@ -87,7 +87,7 @@ const plugins = {
         },
         yMin: 4,
         yMax: 6.9,
-        backgroundColor: "rgba(124, 245, 95, 0.2)",
+        backgroundColor: "rgba(124, 245, 95, 0.15)",
         borderWidth: 0
       },
 
@@ -97,9 +97,9 @@ const plugins = {
           display: true,
           content: "Negligible"
         },
-        yMin: 3.9,
-        yMax: 0,
-        backgroundColor: "rgba(19, 245, 7, 0.2)",
+        yMin: 0,
+        yMax: 3.9,
+        backgroundColor: "rgba(19, 245, 7, 0.15)",
         borderWidth: 0
       }
     }

@@ -4,12 +4,12 @@ const dimensions_config = {
     pointRadius: 6,
     pointBorderColor: "#999999",
     pointBorderWidth: 3
-
-    // backgroundColor: "#f87979"
   },
   K10_Score: {
     label: "K10",
-    backgroundColor: "#f87979"
+    pointRadius: 6,
+    pointBorderColor: "#999999",
+    pointBorderWidth: 3
   },
   Past4WkQualityOfLifeScore: {
     label: "QOL",
@@ -37,22 +37,34 @@ const dimensions_config = {
   Past4WkHowOftenPhysicalHealthCausedProblems: {
     label: "Physical Health",
     backgroundColor: "#3A4579",
-    borderColor: "rgb(75, 192, 192)"
+    borderColor: "rgb(75, 192, 192)",
+    pointRadius: 5,
+    pointBorderColor: "white",
+    pointBorderWidth: 1
   },
   Past4WkHowOftenMentalHealthCausedProblems: {
     label: "Mental Health",
     backgroundColor: "#f87979",
-    borderColor: "rgb(192, 75, 192)"
+    borderColor: "rgb(192, 75, 192)",
+    pointRadius: 5,
+    pointBorderColor: "white",
+    pointBorderWidth: 1
   },
   Past4WkUseLedToProblemsWithFamilyFriend: {
     label: "Relationship",
     borderColor: "rgb(192, 192, 75)",
-    backgroundColor: "#A17979"
+    backgroundColor: "#A17979",
+    pointRadius: 5,
+    pointBorderColor: "white",
+    pointBorderWidth: 1
   },
   Past4WkDailyLivingImpacted: {
     label: "Daily Living",
     borderColor: "rgb(92, 92, 175)",
-    backgroundColor: "#79B179"
+    backgroundColor: "#79B179",
+    pointRadius: 5,
+    pointBorderColor: "white",
+    pointBorderWidth: 1
   },
   Past4WkDifficultyFindingHousing: {
     label: "Housing",

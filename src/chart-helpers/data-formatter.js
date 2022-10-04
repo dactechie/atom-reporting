@@ -1,5 +1,8 @@
 import * as sds from "./sds";
+import * as k10 from "./k10";
 import * as probs from "./probs";
+import * as phyMentQoL from "./phyMentQoL";
+import * as PDCUse from "./PDCDrugUse";
 import { dimensions_config } from "./atom_dimensions";
 import { getMinMaxAcrossLists, getRangeAvg } from "../common/utils";
 
@@ -96,10 +99,24 @@ const charts = [
   {
     chartGroupName: "probs",
     fields: probs.fields,
-    options: probs.options,
+    // options: probs.options,
     plugins: probs.plugins,
     title: probs.title,
     scalingOptionsFunc: probs.getScalingOptions
+  },
+  {
+    chartGroupName: "PDCUse",
+    fields: PDCUse.fields,
+    options: PDCUse.options,
+    plugins: PDCUse.plugins,
+    title: PDCUse.title
+  },
+  {
+    chartGroupName: "phyMentQoL",
+    fields: phyMentQoL.fields,
+    options: phyMentQoL.options,
+    plugins: phyMentQoL.plugins,
+    title: phyMentQoL.title
   },
 
   {
@@ -108,6 +125,13 @@ const charts = [
     options: sds.options,
     plugins: sds.plugins,
     title: sds.title
+  },
+  {
+    chartGroupName: "k10",
+    fields: k10.field,
+    options: k10.options,
+    plugins: k10.plugins,
+    title: k10.title
   }
 ];
 
@@ -134,16 +158,30 @@ export function setUpCharts(atomData, assessmentDates) {
       };
     } else {
       const data = setupGenericMulti1(atomData, chart.fields, assessmentDates);
-      const { maxVal, minVal } = getMinMaxAcrossLists(
-        Array.from(data["datasets"])
-      );
+      if (chart.scalingOptionsFunc !== undefined) {
+        const { minVal, maxVal } = getMinMaxAcrossLists(
+          Array.from(data["datasets"])
+        );
+        chart.options = chart.scalingOptionsFunc(minVal, maxVal);
+      }
       result[chart.chartGroupName] = {
         title: chart.title,
         plugins: chart.plugins,
         data: data,
-        options: chart.scalingOptionsFunc(maxVal, minVal)
+        options: chart.options
       };
     }
   }
   return result;
 }
+
+/*
+    let minVal = 0,
+        maxVal = 100;
+      if (chart.hasCommonScales) {
+        const maxMin = getMinMaxAcrossLists(Array.from(data["datasets"]));
+        maxVal = maxMin['maxVal'], minVal = maxMin['minVal'];
+      } else {
+        extendYscale1(atomData, )
+      }
+*/

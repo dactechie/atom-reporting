@@ -19,3 +19,6 @@ https://portal.azure.com/#@directionshealth.com/resource/subscriptions/e1a42143-
 
 TODO :
 https://jsbin.com/yiyejumaye/1/edit?html,js,output
+
+Range colors:
+https://stackoverflow.com/questions/67721810/how-to-apply-to-different-bground-color-for-each-area-in-chart-js

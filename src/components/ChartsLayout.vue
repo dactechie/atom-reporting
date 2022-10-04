@@ -1,10 +1,6 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import {
-  getRangeAvg,
-  monthNamesShort,
-  getMinMaxAcrossLists
-} from "../common/utils";
+import { getRangeAvg, monthNamesShort } from "../common/utils";
 import { setUpCharts } from "../chart-helpers/data-formatter";
 import LineChart from "./LineChart.vue";
 
@@ -12,16 +8,14 @@ const props = defineProps({
   userATOMs: Array,
   SLK: String
 });
-const otherOptions = {
-  tension: 0.2
-};
+// const otherOptions = {
+//   tension: 0.2
+// };
 
-const k10Data = ref({});
-
-const PDCUseData = ref({});
+const PDCUse = ref({});
 
 let sds = ref({});
-// probs = ref({});
+let k10 = ref({});
 
 const k10Title = "Kessler-10 Scores (🡻 = 👍)";
 
@@ -42,9 +36,9 @@ const phyMentQoLOpts = ref({
     }
   }
 });
-const probsOpts = ref({});
+// const probsOpts = ref({});
 const probs = ref({});
-const probsTitle = "Problems in Daily Life (🡻 = 👍)";
+// const probsTitle = "Problems in Daily Life (🡻 = 👍)";
 
 const mapOfRatings = {
   "Daily or almost daily": 4,
@@ -65,72 +59,25 @@ const valueFuncs = {
   PDCHowMuchPerOccassion: getRangeAvg
 };
 
-const dataKey_labels = {
-  K10_Score: {
-    label: "K10",
-    backgroundColor: "#f87979"
-  },
-  Past4WkQualityOfLifeScore: {
-    label: "QOL",
-    borderColor: "rgb(192, 192, 75)",
-    backgroundColor: "#A17979"
-  },
-  PDCHowMuchPerOccassion: {
-    label: "PDC How much per Occassion",
-    backgroundColor: "#A17979"
-  },
-  PDCDaysInLast28: {
-    label: "PDC Num. Days used in last 28",
-    backgroundColor: "#3A4579"
-  },
-  Past4WkPhysicalHealth: {
-    label: "Physical Health",
-    backgroundColor: "#3A4579",
-    borderColor: "rgb(75, 192, 192)"
-  },
-  Past4WkMentalHealth: {
-    label: "Mental Health",
-    backgroundColor: "#f87979",
-    borderColor: "rgb(192, 75, 192)"
-  },
-  Past4WkHowOftenPhysicalHealthCausedProblems: {
-    label: "Physical Health",
-    backgroundColor: "#3A4579",
-    borderColor: "rgb(75, 192, 192)"
-  },
-  Past4WkHowOftenMentalHealthCausedProblems: {
-    label: "Mental Health",
-    backgroundColor: "#f87979",
-    borderColor: "rgb(192, 75, 192)"
-  },
-  Past4WkUseLedToProblemsWithFamilyFriend: {
-    label: "Relationship",
-    borderColor: "rgb(192, 192, 75)",
-    backgroundColor: "#A17979"
-  },
-  Past4WkDailyLivingImpacted: {
-    label: "Daily Living",
-    borderColor: "rgb(92, 92, 175)",
-    backgroundColor: "#79B179"
-  },
-  Past4WkDifficultyFindingHousing: {
-    label: "Housing",
-    backgroundColor: "#3A4579",
-    borderColor: "rgb(25, 125, 75)",
-    pointRadius: 5,
-    pointBorderColor: "white",
-    pointBorderWidth: 1
-  }
-};
+// const dataKey_labels = {
+//   PDCHowMuchPerOccassion: {
+//     label: "PDC How much per Occassion",
+//     backgroundColor: "#A17979"
+//   },
+//   PDCDaysInLast28: {
+//     label: "PDC Num. Days used in last 28",
+//     backgroundColor: "#3A4579"
+//   }
+// };
 
-function getNumericArrayForField(atomData, field, mappingDict, mappingFunc) {
-  if (mappingDict !== undefined)
-    return atomData.map(a => mappingDict[a[field]]);
-  else if (mappingFunc !== undefined)
-    return atomData.map(a => mappingFunc(a[field]));
+// function getNumericArrayForField(atomData, field, mappingDict, mappingFunc) {
+//   if (mappingDict !== undefined)
+//     return atomData.map(a => mappingDict[a[field]]);
+//   else if (mappingFunc !== undefined)
+//     return atomData.map(a => mappingFunc(a[field]));
 
-  return atomData.map(a => a[field]);
-}
+//   return atomData.map(a => a[field]);
+// }
 
 function extendYscale(atomData, fieldName) {
   const numericList = atomData.map(a => a[fieldName]).filter(a => a);
@@ -145,47 +92,36 @@ function extendYscale(atomData, fieldName) {
   };
 }
 
-function setupGenericMulti(atomData, dataKeys, xaxis) {
-  const datasets = [];
+// function setupGenericMulti(atomData, dataKeys, xaxis) {
+//   const datasets = [];
 
-  dataKeys.forEach(k => {
-    const dataConfig = dataKey_labels[k];
-    const valueMapping = valueMappings[k];
-    const valueFunc = valueFuncs[k];
+//   dataKeys.forEach(k => {
+//     const dataConfig = dataKey_labels[k];
+//     const valueMapping = valueMappings[k];
+//     const valueFunc = valueFuncs[k];
 
-    datasets.push(
-      Object.assign(
-        { data: getNumericArrayForField(atomData, k, valueMapping, valueFunc) },
-        dataConfig,
-        otherOptions
-      )
-    );
-    console.log(`Data Key ${k}, dataset:`, datasets);
-  });
+//     datasets.push(
+//       Object.assign(
+//         { data: getNumericArrayForField(atomData, k, valueMapping, valueFunc) },
+//         dataConfig,
+//         otherOptions
+//       )
+//     );
+//     console.log(`Data Key ${k}, dataset:`, datasets);
+//   });
 
-  return {
-    labels: xaxis,
-    datasets: datasets,
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      scales: {
-        offset: true
-      }
-    }
-  };
-}
-
-function setupGeneric(atomData, dataKey, xaxis) {
-  const dataConfig = dataKey_labels[dataKey];
-
-  return {
-    labels: xaxis,
-    datasets: [
-      Object.assign({ data: atomData.map(a => a[dataKey]) }, dataConfig)
-    ]
-  };
-}
+//   return {
+//     labels: xaxis,
+//     datasets: datasets
+//     // options: {
+//     //   responsive: true,
+//     //   maintainAspectRatio: true,
+//     //   scales: {
+//     //     offset: true
+//     //   }
+//     // }
+//   };
+// }
 
 onBeforeMount(() => {
   if (props.userATOMs === undefined || props.userATOMs.length <= 0) return;
@@ -196,51 +132,30 @@ onBeforeMount(() => {
         monthNamesShort[parseInt(a["AssessmentDate"].substr(5, 2))]
       }`
   );
-  // setupSDS(assessmentDates);
-  phyMentQoL.value = setupGenericMulti(
-    atomData,
-    [
-      "Past4WkPhysicalHealth",
-      "Past4WkMentalHealth",
-      "Past4WkQualityOfLifeScore"
-    ],
-    assessmentDates
-  );
 
-  const probsFields = [
-    "Past4WkHowOftenPhysicalHealthCausedProblems",
-    "Past4WkHowOftenMentalHealthCausedProblems",
-    "Past4WkUseLedToProblemsWithFamilyFriend",
-    "Past4WkDailyLivingImpacted",
-    "Past4WkDifficultyFindingHousing"
-    // illegal activities
-  ];
-  probs.value = setupGenericMulti(atomData, probsFields, assessmentDates);
-  const { maxVal, minVal } = getMinMaxAcrossLists(
-    Array.from(probs.value["datasets"])
-  );
+  // phyMentQoL.value = setupGenericMulti(
+  //   atomData,
+  //   [
+  //     "Past4WkPhysicalHealth",
+  //     "Past4WkMentalHealth",
+  //     "Past4WkQualityOfLifeScore"
+  //   ],
+  //   assessmentDates
+  // );
 
-  probsOpts.value = {
-    scales: {
-      y: {
-        min: minVal - 2,
-        max: maxVal + 2
-      }
-    }
-  };
-
-  PDCUseData.value = setupGenericMulti(
-    atomData,
-    ["PDCHowMuchPerOccassion", "PDCDaysInLast28"],
-    assessmentDates
-  );
+  // PDCUseData.value = setupGenericMulti(
+  //   atomData,
+  //   ["PDCHowMuchPerOccassion", "PDCDaysInLast28"],
+  //   assessmentDates
+  // );
   DrugUseOpts.value = extendYscale(atomData, "PDCDaysInLast28");
 
   const results = setUpCharts(atomData, assessmentDates);
   sds.value = results["sds"];
-  // probs.value = results["probs"];
-
-  k10Data.value = setupGeneric(atomData, "K10_Score", assessmentDates);
+  k10.value = results["k10"];
+  probs.value = results["probs"];
+  phyMentQoL.value = results["phyMentQoL"];
+  PDCUse.value = results["PDCUse"];
 });
 // onMounted(() => {
 //   // ready.value = true;
@@ -255,8 +170,8 @@ onBeforeMount(() => {
     <div class="LeftArea">
       <div class="LeftTop">
         <LineChart
-          :chart-data="PDCUseData"
-          :chart-title="PDCDaysTitle"
+          :chart-data="PDCUse.data"
+          :chart-title="PDCUse.title"
           :chart-opts="DrugUseOpts"
         />
       </div>
@@ -271,9 +186,10 @@ onBeforeMount(() => {
         </div>
         <div class="LBt2">
           <LineChart
-            v-if="k10Data"
-            :chart-data="k10Data"
-            :chart-title="k10Title"
+            :chart-data="k10.data"
+            :chart-title="k10.title"
+            :chart-opts="k10.options"
+            :chart-plugins="k10.plugins"
           />
         </div>
       </div>
@@ -281,21 +197,18 @@ onBeforeMount(() => {
     <div class="RightArea">
       <div class="RightTop">
         <LineChart
-          :chart-data="phyMentQoL"
-          :chart-title="phyMentQoLTitle"
-          :chart-opts="phyMentQoLOpts"
+          :chart-data="phyMentQoL.data"
+          :chart-title="phyMentQoL.title"
+          :chart-opts="phyMentQoL.options"
+          :chart-plugins="phyMentQoL.plugins"
         />
       </div>
       <div class="RightBottom">
-        <!-- <LineChart
+        <LineChart
           :chart-data="probs.data"
           :chart-title="probs.title"
           :chart-opts="probs.options"
-        /> -->
-        <LineChart
-          :chart-data="probs"
-          :chart-title="probsTitle"
-          :chart-opts="probsOpts"
+          :chart-plugins="probs.plugins"
         />
       </div>
     </div>

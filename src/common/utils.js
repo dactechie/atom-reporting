@@ -24,7 +24,7 @@ function getRangeAvg(rangeString) {
 
 function SDSColors(index) {
   let severityColor = "#ffffff";
-  console.log("Index " + typeof index);
+  // console.log("Index " + typeof index);
 
   if (index < 4)
     // 0- 3 : Nil/Negligible
@@ -42,28 +42,26 @@ function SDSColors(index) {
   else severityColor = "#E52B50";
 
   return severityColor;
-  // switch (index) {
-  //   case (index < 4): // 0- 3 : Nil/Negligible
-  //     severityColor = "#50eb21";
-  //     break;
+}
 
-  //   case (index < 7): // 4 -6 : Mild
-  //     severityColor = "#e4eb21";
-  //     break;
+function K10Colors(index) {
+  let severityColor = "#ffffff";
+  // console.log("Index " + typeof index);
 
-  //   case (index < 10): // 7 - 9: Moderate
-  //     severityColor = "#ebda21";
-  //     break;
+  if (index < 20)
+    // 0- 3 : Nil/Negligible
+    severityColor = "#50eb21";
+  else if (index < 25)
+    // 4 -6 : Mild
+    severityColor = "#b2f507";
+  else if (index < 30)
+    // 7 - 9: Moderate
+    severityColor = "#ebda21";
+  else if (index < 51)
+    //severe
+    severityColor = "#E52B50";
 
-  //   case (index < 13): // 10- 12: Substantial
-  //     severityColor = "#f5b507";
-  //     break;
-
-  //   default: // 13- 15 : Severe
-  //     severityColor = "#E52B50";
-  //     break;
-  // }
-  // return severityColor;
+  return severityColor;
 }
 
 const monthNamesShort = [
@@ -126,6 +124,7 @@ export {
   sortByAssessmentDate,
   getRangeAvg,
   SDSColors,
+  K10Colors,
   monthNamesShort,
   isValidSLK,
   getMinMaxAcrossLists
