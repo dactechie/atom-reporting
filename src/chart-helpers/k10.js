@@ -1,9 +1,4 @@
-import {
-  // getRangeAvg,
-  K10Colors
-  // monthNamesShort,
-  // getMinMaxAcrossLists
-} from "../common/utils";
+import { K10Colors } from "../chart-helpers/chart-bands";
 
 function pointBackgroundColor1(ctx) {
   if (!ctx.parsed.y) return undefined;

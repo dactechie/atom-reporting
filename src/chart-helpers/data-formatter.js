@@ -94,6 +94,25 @@ function extendYscale1(atomData, fieldName) {
     }
   };
 }
+// sorted dates
+// function extendXscale(atomData, fieldName) {
+//   let firstDate = new Date(Date.parse(atomData[0]["AssessmentDate"]));
+
+//   firstDate.setMonth(firstDate.getMonth()-1);
+//   let lastDate = new Date(Date.parse(atomData[atomData.length-1]["AssessmentDate"]));
+//   firstDate .setMonth(firstDate.getMonth()-1);
+
+//   const numericList = atomData.map(a => a[fieldName]).filter(a => a);
+
+//   return {
+//     scales: {
+//       y: {
+//         min: Math.min(...numericList) - 2,
+//         max: Math.max(...numericList) + 2
+//       }
+//     }
+//   };
+// }
 
 const charts = [
   {
@@ -107,9 +126,10 @@ const charts = [
   {
     chartGroupName: "PDCUse",
     fields: PDCUse.fields,
-    options: PDCUse.options,
+    // options: PDCUse.options,
     plugins: PDCUse.plugins,
-    title: PDCUse.title
+    title: PDCUse.title,
+    scalingOptionsFunc: probs.getScalingOptions
   },
   {
     chartGroupName: "phyMentQoL",

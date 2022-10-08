@@ -1,9 +1,4 @@
-import {
-  // getRangeAvg,
-  SDSColors
-  // monthNamesShort,
-  // getMinMaxAcrossLists
-} from "../common/utils";
+import { SDSColors } from "../chart-helpers/chart-bands";
 
 function pointBackgroundColor(ctx) {
   if (!ctx.parsed.y) return undefined;

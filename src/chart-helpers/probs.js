@@ -26,25 +26,6 @@ function getScalingOptions(minVal, maxVal) {
 }
 
 const plugins = {
-  // legend: {
-  //   display: false
-  // },
-  // zoom: {
-  //   zoom: {
-  //     pan: {
-  //       enabled: true,
-  //       mode: "xy"
-  //     },
-  //     limits: {
-  //       y: { min: 0, max: 12 }
-  //     }
-
-  //     // mode: "xy",
-  //   },
-  //   wheel: {
-  //     enabled: true
-  //   }
-  // },
   annotation: {
     annotations: {
       dailyProbsBox: {
