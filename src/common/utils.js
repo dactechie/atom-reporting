@@ -16,7 +16,7 @@ function dateToYYYMMDD(dateObj) {
 function getAssessmentDates(atomData) {
   const assessmentDates = atomData.map(
     a =>
-      `${monthNamesShort[parseInt(a["AssessmentDate"].substr(5, 2))]}-'${a[
+      `${monthNamesShort[parseInt(a["AssessmentDate"].substr(5, 2)) - 1]}-'${a[
         "AssessmentDate"
       ].substr(2, 2)}`
   );
