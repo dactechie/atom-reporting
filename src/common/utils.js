@@ -9,12 +9,16 @@ function sortByAssessmentDate(surveyDataObject) {
   return result;
 }
 
+function dateToYYYMMDD(dateObj) {
+  return dateObj.toISOString().split("T")[0];
+}
+
 function getAssessmentDates(atomData) {
   const assessmentDates = atomData.map(
     a =>
-      `'${a["AssessmentDate"].substr(2, 2)}-${
-        monthNamesShort[parseInt(a["AssessmentDate"].substr(5, 2))]
-      }`
+      `${monthNamesShort[parseInt(a["AssessmentDate"].substr(5, 2))]}-'${a[
+        "AssessmentDate"
+      ].substr(2, 2)}`
   );
   return assessmentDates;
 }
@@ -94,5 +98,6 @@ export {
   monthNamesShort,
   isValidSLK,
   getMinMaxAcrossLists,
-  getAssessmentDates
+  getAssessmentDates,
+  dateToYYYMMDD
 };

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import { getAssessmentDates } from "../common/utils";
+
 import { setUpCharts } from "../chart-helpers/data-formatter";
 import LineChart from "./LineChart.vue";
 
@@ -19,9 +19,8 @@ onBeforeMount(() => {
   if (props.userATOMs === undefined || props.userATOMs.length <= 0) return;
 
   const atomData = props.userATOMs;
-  const assessmentDates = getAssessmentDates(atomData);
 
-  const results = setUpCharts(atomData, assessmentDates);
+  const results = setUpCharts(atomData);
   sds.value = results["sds"];
   k10.value = results["k10"];
   probs.value = results["probs"];
@@ -44,6 +43,7 @@ onBeforeMount(() => {
           :chart-data="PDCUse.data"
           :chart-title="PDCUse.title"
           :chart-opts="PDCUse.options"
+          :chart-plugins="PDCUse.plugins"
         />
       </div>
       <div class="LeftBottom">
