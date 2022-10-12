@@ -32,7 +32,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Daily or almost daily"
+          content: "Daily or almost daily",
+          position: "start"
         },
         yMin: 3,
         yMax: 4.9,
@@ -62,7 +63,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Less than weekly"
+          content: "Less than weekly",
+          position: "start"
         },
         yMin: 0,
         yMax: 0.9,

@@ -122,7 +122,7 @@ onBeforeMount(() => {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  gap: 0px 0px;
+  gap: 4px 4px;
   /* grid-auto-flow: row; */
   grid-template-areas:
     "LBt1 LBt1 LBt1"

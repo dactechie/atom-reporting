@@ -20,7 +20,7 @@ function getNumericArrayForField1(atomData, field, mappingDict, mappingFunc) {
   return atomData.map(a => a[field]);
 }
 
-function setupGeneric1(atomData, dataKey, xaxis) {
+function setupGeneric(atomData, dataKey, xaxis) {
   const dataConfig = dimensions_config[dataKey];
 
   return {
@@ -167,14 +167,13 @@ export function setUpCharts(atomData) {
 
   const newAtomData = extendXscale(atomData);
   const assessmentDates = getAssessmentDates(newAtomData);
-  console.log("x-centered ATOMs assesments", assessmentDates);
   for (const chart of charts) {
     if (typeof chart.fields === "string") {
       const fieldname = chart.fields;
       result[chart.chartGroupName] = {
         title: chart.title,
         plugins: chart.plugins,
-        data: setupGeneric1(newAtomData, fieldname, assessmentDates),
+        data: setupGeneric(newAtomData, fieldname, assessmentDates),
         options: Object.assign(
           extendYscale(newAtomData, fieldname),
           chart.options
