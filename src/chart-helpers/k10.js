@@ -1,9 +1,4 @@
-import {
-  // getRangeAvg,
-  K10Colors
-  // monthNamesShort,
-  // getMinMaxAcrossLists
-} from "../common/utils";
+import { K10Colors } from "../chart-helpers/chart-bands";
 
 function pointBackgroundColor1(ctx) {
   if (!ctx.parsed.y) return undefined;
@@ -49,7 +44,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "likely severe MH concerns"
+          content: "likely severe concerns",
+          position: "start"
         },
         yMin: 30,
         yMax: 50,
@@ -60,7 +56,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "likely moderate MH concerns"
+          content: "likely moderate concerns",
+          position: "start"
         },
         yMin: 25,
         yMax: 29.9,
@@ -72,7 +69,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Likely Mild MH concerns"
+          content: "Likely mild concerns",
+          position: "start"
         },
         yMin: 20,
         yMax: 24.9,
@@ -84,7 +82,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Likely well"
+          content: "Likely well",
+          position: "start"
         },
         yMin: 0,
         yMax: 19.9,

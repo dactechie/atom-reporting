@@ -26,32 +26,14 @@ function getScalingOptions(minVal, maxVal) {
 }
 
 const plugins = {
-  // legend: {
-  //   display: false
-  // },
-  // zoom: {
-  //   zoom: {
-  //     pan: {
-  //       enabled: true,
-  //       mode: "xy"
-  //     },
-  //     limits: {
-  //       y: { min: 0, max: 12 }
-  //     }
-
-  //     // mode: "xy",
-  //   },
-  //   wheel: {
-  //     enabled: true
-  //   }
-  // },
   annotation: {
     annotations: {
       dailyProbsBox: {
         type: "box",
         label: {
           display: true,
-          content: "Daily or almost daily"
+          content: "Daily or almost daily",
+          position: "start"
         },
         yMin: 3,
         yMax: 4.9,
@@ -81,7 +63,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Less than weekly"
+          content: "Less than weekly",
+          position: "start"
         },
         yMin: 0,
         yMax: 0.9,

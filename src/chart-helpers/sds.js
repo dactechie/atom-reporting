@@ -1,9 +1,4 @@
-import {
-  // getRangeAvg,
-  SDSColors
-  // monthNamesShort,
-  // getMinMaxAcrossLists
-} from "../common/utils";
+import { SDSColors } from "../chart-helpers/chart-bands";
 
 function pointBackgroundColor(ctx) {
   if (!ctx.parsed.y) return undefined;
@@ -49,7 +44,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Severe"
+          content: "Severe",
+          position: "start"
         },
         yMin: 12.9,
         yMax: 15,
@@ -60,7 +56,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "substantial"
+          content: "substantial",
+          position: "start"
         },
         yMin: 9.9,
         yMax: 12.9,
@@ -71,7 +68,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "moderate"
+          content: "moderate",
+          position: "start"
         },
         yMin: 7,
         yMax: 9.9,
@@ -83,7 +81,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Mild"
+          content: "Mild",
+          position: "start"
         },
         yMin: 4,
         yMax: 6.9,
@@ -95,7 +94,8 @@ const plugins = {
         type: "box",
         label: {
           display: true,
-          content: "Negligible"
+          content: "Negligible",
+          position: "start"
         },
         yMin: 0,
         yMax: 3.9,

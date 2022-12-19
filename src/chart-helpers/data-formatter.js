@@ -4,7 +4,12 @@ import * as probs from "./probs";
 import * as phyMentQoL from "./phyMentQoL";
 import * as PDCUse from "./PDCDrugUse";
 import { dimensions_config } from "./atom_dimensions";
-import { getMinMaxAcrossLists, getRangeAvg } from "../common/utils";
+import {
+  getMinMaxAcrossLists,
+  getRangeAvg,
+  getAssessmentDates,
+  dateToYYYMMDD
+} from "../common/utils";
 
 function getNumericArrayForField1(atomData, field, mappingDict, mappingFunc) {
   if (mappingDict !== undefined)
@@ -15,7 +20,7 @@ function getNumericArrayForField1(atomData, field, mappingDict, mappingFunc) {
   return atomData.map(a => a[field]);
 }
 
-function setupGeneric1(atomData, dataKey, xaxis) {
+function setupGeneric(atomData, dataKey, xaxis) {
   const dataConfig = dimensions_config[dataKey];
 
   return {
@@ -49,7 +54,7 @@ const otherOptions = {
   tension: 0.2
 };
 
-function setupGenericMulti1(atomData, dataKeys, xaxis) {
+function setupGenericMulti(atomData, dataKeys, xaxis) {
   const datasets = [];
 
   dataKeys.forEach(k => {
@@ -82,7 +87,7 @@ function setupGenericMulti1(atomData, dataKeys, xaxis) {
   };
 }
 
-function extendYscale1(atomData, fieldName) {
+function extendYscale(atomData, fieldName) {
   const numericList = atomData.map(a => a[fieldName]).filter(a => a);
 
   return {
@@ -93,6 +98,21 @@ function extendYscale1(atomData, fieldName) {
       }
     }
   };
+}
+// sorted dates
+function extendXscale(atomData) {
+  let firstDate = new Date(Date.parse(atomData[0]["AssessmentDate"]));
+  firstDate.setMonth(firstDate.getMonth() - 2);
+
+  let lastDate = new Date(
+    Date.parse(atomData[atomData.length - 1]["AssessmentDate"])
+  );
+  lastDate.setMonth(lastDate.getMonth() + 1);
+
+  const newArray = [{ AssessmentDate: dateToYYYMMDD(firstDate) }]
+    .concat(atomData)
+    .concat({ AssessmentDate: dateToYYYMMDD(lastDate) });
+  return newArray;
 }
 
 const charts = [
@@ -107,9 +127,10 @@ const charts = [
   {
     chartGroupName: "PDCUse",
     fields: PDCUse.fields,
-    options: PDCUse.options,
+    // options: PDCUse.options,
     plugins: PDCUse.plugins,
-    title: PDCUse.title
+    title: PDCUse.title,
+    scalingOptionsFunc: probs.getScalingOptions
   },
   {
     chartGroupName: "phyMentQoL",
@@ -141,23 +162,29 @@ const charts = [
 // );
 
 //props.userATOMs.
-export function setUpCharts(atomData, assessmentDates) {
+export function setUpCharts(atomData) {
   let result = {};
 
+  const newAtomData = extendXscale(atomData);
+  const assessmentDates = getAssessmentDates(newAtomData);
   for (const chart of charts) {
     if (typeof chart.fields === "string") {
       const fieldname = chart.fields;
       result[chart.chartGroupName] = {
         title: chart.title,
         plugins: chart.plugins,
-        data: setupGeneric1(atomData, fieldname, assessmentDates),
+        data: setupGeneric(newAtomData, fieldname, assessmentDates),
         options: Object.assign(
-          extendYscale1(atomData, fieldname),
+          extendYscale(newAtomData, fieldname),
           chart.options
         )
       };
     } else {
-      const data = setupGenericMulti1(atomData, chart.fields, assessmentDates);
+      const data = setupGenericMulti(
+        newAtomData,
+        chart.fields,
+        assessmentDates
+      );
       if (chart.scalingOptionsFunc !== undefined) {
         const { minVal, maxVal } = getMinMaxAcrossLists(
           Array.from(data["datasets"])

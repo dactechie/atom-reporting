@@ -44,11 +44,11 @@ onMounted(() => {
           enabled: true
           // mode: "xy"
         },
-        limits: {
-          y: { min: 0, max: 30 }
-        },
+        // limits: {
+        //   y: { min: 0, max: 30 }
+        // },
         zoom: {
-          // mode: "xy",
+          mode: "x",
 
           wheel: {
             enabled: true

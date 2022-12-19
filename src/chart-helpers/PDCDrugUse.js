@@ -1,12 +1,12 @@
 const fields = ["PDCHowMuchPerOccassion", "PDCDaysInLast28"];
 
 const options = {
-  scales: {
-    y: {
-      min: 0,
-      max: 28
-    }
-  }
+  // scales: {
+  //   y: {
+  //     min: 0,
+  //     max: 28
+  //   }
+  // }
 };
 
 const plugins = {

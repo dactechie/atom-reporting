@@ -25,18 +25,16 @@ async function getClientDataByPartitionKey(
     requestType: "GET",
     userMode: userMode
   };
-  const result = await doPostAction(GET_URL, data);
-  const r = fromAZDataArray(await result.value);
-  // const r = await mockClientData;
-
+  const r = await doPostAction(GET_URL, data);
+  // const r = fromAZDataArray(await result.value);
   // let url = "../src/api/mockClientData2.json";
   // await sleep(500);
   // let response = await fetch(url);
   // await sleep(500);
   // let rjson = await response.json();
-  // let result = await rjson[partitionKey];
+  // let r = await rjson[partitionKey];
 
-  // console.log("return from backend ", await result);
+  // // console.log("return from backend ", await result);
   return r;
 }
 
