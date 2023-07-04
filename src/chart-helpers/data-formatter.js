@@ -47,7 +47,7 @@ const valueMappings = {
   Past4WkDifficultyFindingHousing: mapOfRatings
 };
 const valueFuncs = {
-  PDCHowMuchPerOccassion: getRangeAvg
+  PDCHowMuchPerOccasion: getRangeAvg
 };
 
 const otherOptions = {
@@ -164,6 +164,11 @@ const charts = [
 //props.userATOMs.
 export function setUpCharts(atomData) {
   let result = {};
+  // const distinctPDCs = [
+  //   ...new Set(Array.from(atomData.values()).map(a => a.PDCSubstanceOrGambling))
+  // ];
+  // const pdcChart = charts.find(e => e.chartGroupName ==="PDCUse");
+  // pdcChart.title = `${distinctPDCs[0]} ${use frequency & amount (🡻 = 👍)}` || pdcChart.title
 
   const newAtomData = extendXscale(atomData);
   const assessmentDates = getAssessmentDates(newAtomData);

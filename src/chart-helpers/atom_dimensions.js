@@ -11,28 +11,35 @@ const dimensions_config = {
     pointBorderColor: "#999999",
     pointBorderWidth: 3
   },
-  Past4WkQualityOfLifeScore: {
-    label: "QOL",
-    borderColor: "rgb(192, 192, 75)",
-    backgroundColor: "#A17979"
-  },
-  PDCHowMuchPerOccassion: {
+  PDCHowMuchPerOccasion: {
     label: "PDC How much per Occassion",
+    pointRadius: 6,
     backgroundColor: "#A17979"
   },
   PDCDaysInLast28: {
     label: "PDC Num. Days used in last 28",
+    pointRadius: 6,
     backgroundColor: "#3A4579"
+  },
+  Past4WkQualityOfLifeScore: {
+    label: "QOL",
+    borderColor: "rgb(192, 192, 75)",
+    backgroundColor: "#A17979",
+    pointRadius: 6,
+    pointStyle: "triangle",
+    borderWidth: 3
   },
   Past4WkPhysicalHealth: {
     label: "Physical Health",
     backgroundColor: "#3A4579",
-    borderColor: "rgb(75, 192, 192)"
+    borderColor: "rgb(75, 192, 192)",
+    pointRadius: 5
   },
   Past4WkMentalHealth: {
     label: "Mental Health",
     backgroundColor: "#f87979",
-    borderColor: "rgb(192, 75, 192)"
+    borderColor: "rgb(192, 75, 192)",
+    pointRadius: 5
   },
   Past4WkHowOftenPhysicalHealthCausedProblems: {
     label: "Physical Health",
