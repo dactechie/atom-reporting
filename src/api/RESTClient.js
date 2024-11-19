@@ -18,11 +18,13 @@ async function doGetAction(url) {
 }
 
 async function doPostAction(url, data = {}) {
+  console.log("URL", url);
   // return await fetchAction(url, "POST", data);
   let options = {
     method: "POST" // *GET, POST, PUT, DELETE, etc.
     // mode: 'cors', // no-cors, *cors, same-origin
   };
+
   options["headers"] = { "Content-Type": "application/json" };
   if (data) {
     options["body"] = JSON.stringify(data);

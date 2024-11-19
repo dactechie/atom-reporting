@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { getClientDataByPartitionKey } from "./api/AZTableService.js";
+// import mockClientData from "@/api/mockClientData";
 import { sortByAssessmentDate, isValidSLK } from "./common/utils";
 // import HelloWorld from "./components/HelloWorld.vue";
 
@@ -36,17 +37,21 @@ onBeforeMount(async () => {
   console.log("SLK is ", SLK);
   try {
     const result = await getClientDataByPartitionKey(SLK.value);
+    // const result = mockClientData["ALLFT210719811"]
     if (!result) {
       throw "Did not find any result for SLK: " + SLK.value;
     }
-    console.log(result);
+    console.log("resylt", result);
     const sorted = sortByAssessmentDate(result);
     userATOMs.value = sorted;
-    console.log(userATOMs);
+    console.log("User atoms ", userATOMs.value);
   } catch (err) {
     error.value = { message: err };
+  } finally {
+    forceRerender();
+  //  console.log("Finally");
   }
-  forceRerender();
+  
 });
 
 // onMounted(async () => {
@@ -75,7 +80,9 @@ onBeforeMount(async () => {
       </div>
     </div>
     <div v-else-if="!hasSLK">
-      <div class="Charts"><h1>... NO SLK ...</h1></div>
+      <div class="Charts">
+        <h1>... NO SLK ...</h1>
+      </div>
     </div>
 
     <Suspense v-else>
@@ -85,27 +92,22 @@ onBeforeMount(async () => {
             <img class="LeftLogo" src="./assets/ATOMLogo.png" alt="ATOM Logo" />
             <div class="MainTitle">
               <h3>Client Outcomes for : {{ SLK }}</h3>
-              <h4>{{ VITE_GETCLIENT_LOGICAAPP_URL }}</h4>
+              <!-- <h4>{{ VITE_GETCLIENT_LOGICAPP_URL }}</h4> -->
             </div>
             <div class="RightLogo">
-              <img
-                src="./assets/DirectionsLogoFull.png"
-                alt="Directions Logo"
-              />
+              <img src="./assets/DirectionsLogoFull.png" alt="Directions Logo" />
             </div>
             <!-- <button>RESET ZOOM</button> -->
           </div>
-          <div class="Charts" id="charts" v-if="userATOMs.length > 0">
-            <ChartsLayout
-              :key="componentKey"
-              :userATOMs="userATOMs"
-              :SLK="SLK"
-            />
+          <div class="Charts" id="charts">
+            <ChartsLayout :key="componentKey" :userATOMs="userATOMs" :SLK="SLK" />
           </div>
         </div>
       </template>
       <template #fallback>
-        <div class="Charts"><h1>Loading...</h1></div>
+        <div class="Charts">
+          <h1>Loading...</h1>
+        </div>
       </template>
     </Suspense>
   </div>

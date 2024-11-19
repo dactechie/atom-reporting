@@ -1,6 +1,6 @@
 <script setup>
 import { Line } from "vue-chartjs";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch} from "vue";
 import {
   Chart as ChartJS,
   Title,
@@ -21,15 +21,44 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
+// const props = defineProps({
+//   chartTitle: String,
+//   chartData: Object,
+//   chartOpts: Object,
+//   chartPlugins: Object
+// });
 const props = defineProps({
   chartTitle: String,
-  chartData: Object,
+  chartData: {
+    type: Object,
+    default: () => ({
+      labels: [],
+      datasets: []
+    })
+  },
   chartOpts: Object,
   chartPlugins: Object
 });
 
+//dynamic
+
+// const props = defineProps({
+//   chartData: Object,
+//   chartConfig: Object,
+//   chartId: String
+// });
+
 const chartOptions = ref({});
-const chartData1 = ref({});
+const chartData1 = ref({
+  labels: [],
+  datasets: []
+});
+
+watch(() => props.chartData, (newData) => {
+  if (newData) {
+    chartData1.value = newData;
+  }
+}, { immediate: true });
 
 onMounted(() => {
   const plugins = Object.assign(
@@ -47,20 +76,32 @@ onMounted(() => {
         limits: {
           y: { min: 0, max: 30 }
         },
-        zoom: {
-          // mode: "xy",
-
-          wheel: {
-            enabled: true
-
-            // rangeMin: {
-            //   y: -2
-            // },
-            // rangeMax: {
-            //   y: 18
-            // }
-          }
+        // zoom: {
+        //   wheel: {
+        //     enabled: true,
+        //     modifierKey: 'ctrl',
+        //     // Add these options
+        //     passive: true,
+        //     speed: 0.1
+        //   }
+        // },
+        pan: {
+          enabled: true
         }
+        // zoom: {
+        //   // mode: "xy",
+
+        //   // wheel: {
+        //   //   enabled: true
+
+        //   //   // rangeMin: {
+        //   //   //   y: -2
+        //   //   // },
+        //   //   // rangeMax: {
+        //   //   //   y: 18
+        //   //   // }
+        //   // }
+        // }
       }
     },
     props.chartPlugins
@@ -92,7 +133,11 @@ onMounted(() => {
     },
     props.chartOpts
   );
-  chartData1.value = props.chartData;
+  if (props.chartData) {
+    chartData1.value = props.chartData;
+  } else {
+    console.error("chartData is undefined");
+  }
 });
 // };
 </script>

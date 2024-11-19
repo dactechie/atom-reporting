@@ -1,3 +1,6 @@
+import { CHART_TYPES } from "@/chart-helpers/chart-types";
+
+const chartType = CHART_TYPES.LINE;
 const title = "Physical Health, Mental Health & Quality of Life (🡹 = 👍)";
 
 const fields = [
@@ -68,5 +71,5 @@ const plugins = {
     }
   }
 };
-
-export { fields, title, plugins, options };
+const id ='phyMentQoL';
+export { id, fields, chartType, title, plugins, options };

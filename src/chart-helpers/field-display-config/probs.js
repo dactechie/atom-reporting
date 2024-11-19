@@ -1,5 +1,7 @@
 const title = "Problems in Daily Life (🡻 = 👍)";
+import { CHART_TYPES } from "@/chart-helpers/chart-types";
 
+const chartType = CHART_TYPES.LINE;
 const fields = [
   "Past4WkHowOftenPhysicalHealthCausedProblems",
   "Past4WkHowOftenMentalHealthCausedProblems",
@@ -104,4 +106,5 @@ const plugins = {
   }
 };
 
-export { fields, title, plugins, getScalingOptions };
+const id = "PDCDrugUse";
+export { id, fields, chartType, title, plugins, getScalingOptions };

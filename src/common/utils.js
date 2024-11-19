@@ -44,20 +44,21 @@ function SDSColors(index) {
   return severityColor;
 }
 
-function K10Colors(index) {
+function KesslerColors(index, scaleFactor = 1) {
   let severityColor = "#ffffff";
+  const scaledIndex = index * scaleFactor;
   // console.log("Index " + typeof index);
 
-  if (index < 20)
+  if (scaledIndex < 20)
     // 0- 3 : Nil/Negligible
     severityColor = "#50eb21";
-  else if (index < 25)
+  else if (scaledIndex < 25)
     // 4 -6 : Mild
     severityColor = "#b2f507";
-  else if (index < 30)
+  else if (scaledIndex < 30)
     // 7 - 9: Moderate
     severityColor = "#ebda21";
-  else if (index < 51)
+  else if (scaledIndex < 51)
     //severe
     severityColor = "#E52B50";
 
@@ -124,7 +125,7 @@ export {
   sortByAssessmentDate,
   getRangeAvg,
   SDSColors,
-  K10Colors,
+  KesslerColors,
   monthNamesShort,
   isValidSLK,
   getMinMaxAcrossLists

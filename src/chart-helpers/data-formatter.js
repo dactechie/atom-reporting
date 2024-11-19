@@ -1,10 +1,13 @@
-import * as sds from "./sds";
-import * as k10 from "./k10";
-import * as probs from "./probs";
-import * as phyMentQoL from "./phyMentQoL";
-import * as PDCUse from "./PDCDrugUse";
+import * as sds from "./field-display-config/sds";
+import * as k10 from "./field-display-config/k10";
+import * as k5 from "./field-display-config/k5";
+import * as probs from "./field-display-config/probs";
+import * as phyMentQoL from "./field-display-config/phyMentQoL";
+import * as PDCUse from "./field-display-config/PDCDrugUse";
+import * as mlt from "./field-display-config/mlt";
 import { dimensions_config } from "./atom_dimensions";
 import { getMinMaxAcrossLists, getRangeAvg } from "../common/utils";
+import { sortByAssessmentDate } from "@/common/utils";
 
 function getNumericArrayForField1(atomData, field, mappingDict, mappingFunc) {
   if (mappingDict !== undefined)
@@ -15,16 +18,16 @@ function getNumericArrayForField1(atomData, field, mappingDict, mappingFunc) {
   return atomData.map(a => a[field]);
 }
 
-function setupGeneric1(atomData, dataKey, xaxis) {
-  const dataConfig = dimensions_config[dataKey];
+// function setupGeneric1(atomData, dataKey, xaxis) {
+//   const dataConfig = dimensions_config[dataKey];
 
-  return {
-    labels: xaxis,
-    datasets: [
-      Object.assign({ data: atomData.map(a => a[dataKey]) }, dataConfig)
-    ]
-  };
-}
+//   return {
+//     labels: xaxis,
+//     datasets: [
+//       Object.assign({ data: atomData.map(a => a[dataKey]) }, dataConfig)
+//     ]
+//   };
+// }
 
 const mapOfRatings = {
   "Daily or almost daily": 4,
@@ -97,6 +100,14 @@ function extendYscale1(atomData, fieldName) {
 
 const charts = [
   {
+    chartGroupName: "mlt",
+    fields: mlt.fields,
+    // options: probs.options,
+    plugins: mlt.plugins,
+    title: mlt.title,
+    scalingOptionsFunc: mlt.getScalingOptions
+  },
+  {
     chartGroupName: "probs",
     fields: probs.fields,
     // options: probs.options,
@@ -118,20 +129,26 @@ const charts = [
     plugins: phyMentQoL.plugins,
     title: phyMentQoL.title
   },
-
   {
     chartGroupName: "sds",
-    fields: sds.field,
+    fields: sds.fields,
     options: sds.options,
     plugins: sds.plugins,
     title: sds.title
   },
   {
     chartGroupName: "k10",
-    fields: k10.field,
+    fields: k10.fields,
     options: k10.options,
     plugins: k10.plugins,
     title: k10.title
+  },
+  {
+    chartGroupName: "k5",
+    fields: k5.fields,
+    options: k5.options,
+    plugins: k5.plugins,
+    title: k5.title
   }
 ];
 
@@ -141,23 +158,24 @@ const charts = [
 // );
 
 //props.userATOMs.
-export function setUpCharts(atomData, assessmentDates) {
+export function setUpChartsData(atomData, assessmentDates) {
   let result = {};
 
   for (const chart of charts) {
-    if (typeof chart.fields === "string") {
-      const fieldname = chart.fields;
-      result[chart.chartGroupName] = {
-        title: chart.title,
-        plugins: chart.plugins,
-        data: setupGeneric1(atomData, fieldname, assessmentDates),
-        options: Object.assign(
-          extendYscale1(atomData, fieldname),
-          chart.options
-        )
-      };
-    } else {
-      const data = setupGenericMulti1(atomData, chart.fields, assessmentDates);
+    // if (typeof chart.fields === "string") {
+    //   const fieldname = chart.fields;
+    //   result[chart.chartGroupName] = {
+    //     title: chart.title,
+    //     plugins: chart.plugins,
+    //     data: setupGeneric1(atomData, fieldname, assessmentDates),
+    //     options: Object.assign(
+    //       extendYscale1(atomData, fieldname),
+    //       chart.options
+    //     )
+    //   };
+    // } else {
+      const sortedATOMs = sortByAssessmentDate(atomData);
+      const data = setupGenericMulti1(sortedATOMs, chart.fields, assessmentDates);
       if (chart.scalingOptionsFunc !== undefined) {
         const { minVal, maxVal } = getMinMaxAcrossLists(
           Array.from(data["datasets"])
@@ -170,7 +188,7 @@ export function setUpCharts(atomData, assessmentDates) {
         data: data,
         options: chart.options
       };
-    }
+   // }
   }
   return result;
 }

@@ -3,8 +3,10 @@ import {
   SDSColors
   // monthNamesShort,
   // getMinMaxAcrossLists
-} from "../common/utils";
+} from "../../common/utils";
+import { CHART_TYPES } from "@/chart-helpers/chart-types";
 
+const chartType = CHART_TYPES.LINE;
 function pointBackgroundColor(ctx) {
   if (!ctx.parsed.y) return undefined;
   const col = SDSColors(ctx.parsed.y);
@@ -106,6 +108,7 @@ const plugins = {
   }
 };
 
-const field = "SDS_Score";
+const fields = ["SDS_Score"];
 const title = "Severity of Dependence (🡻 = 👍)";
-export { field, title, plugins, options };
+const id = "sds";
+export { id, fields, chartType, title, plugins, options };

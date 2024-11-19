@@ -2,6 +2,7 @@ export default {
   ALLFT210719811: [
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:10,
       RowKey: "COCO_SITK_20220810",
       Timestamp: "2022-08-10T07:36:31.357Z",
       AreYouAccessingOtherServices: "Yes",
@@ -59,10 +60,18 @@ export default {
       SupportTypeBestMatchesNeedsGoals:
         "Arcadia Residential Service - Non-medicated Detox Program 1 week, Althea Nurse, Primary Health Support, Supported Home Detox, Information & Education, Group participation - ADAPT / SMART Recovery / COMPASS / Butt it Out, Case Management, AOD counselling & support (3 - 6 sessions, then review)",
       WhenMentalHealthDiagnosis: "WithinLast3Months",
-      YourCurrentHousing: "Some issues - but mostly ok"
+      YourCurrentHousing: "Some issues - but mostly ok",
+      MLTCoping: 30,
+      MLTDayToDay: 45,
+      MLTGeneralWellbeing: 29,
+      MLTRelWithFamily: 78,
+      MLTRelWithFriends: 50,
+      K5_Score: 25
+
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:13,
       RowKey: "COCO_SITK_20220805",
       Timestamp: "2022-08-05T11:52:19.923Z",
       AreYouAccessingOtherServices: "Yes",
@@ -118,10 +127,17 @@ export default {
       SupportTypeBestMatchesNeedsGoals:
         "Arcadia Residential Service - Non-medicated Detox Program 1 week, Althea Nurse",
       WhenMentalHealthDiagnosis: "MoreThan3MonthsLessThan12 months",
-      YourCurrentHousing: "Some issues - but mostly ok"
+      YourCurrentHousing: "Some issues - but mostly ok",
+      MLTCoping: 40,
+      MLTDayToDay: 25,
+      MLTGeneralWellbeing: 45,
+      MLTRelWithFamily: 78,
+      MLTRelWithFriends: 30,
+      K5_Score: 20
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:20,
       RowKey: "ARCA_ITSP_20220622",
       Timestamp: "2022-06-22T07:11:04.388Z",
       AreYouAccessingOtherServices: "No",
@@ -160,10 +176,17 @@ export default {
       SDSHowMuchDoYouWorryAboutAODUse: 1,
       SDSIsAODUseOutOfControl: 1,
       SDS_Score: 9,
-      SupportTypeBestMatchesNeedsGoals: "Althea Nurse, Primary Health Support"
+      SupportTypeBestMatchesNeedsGoals: "Althea Nurse, Primary Health Support",
+      MLTCoping: 70,
+      MLTDayToDay: 55,
+      MLTGeneralWellbeing: 55,
+      MLTRelWithFamily: 85,
+      MLTRelWithFriends: 40,
+      K5_Score: 17
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:23,
       RowKey: "TSS_ITSP_20220620",
       Timestamp: "2022-06-20T08:39:06.918Z",
       AreYouCurrentlyTakingMeds: "No",
@@ -204,10 +227,17 @@ export default {
       SDSHowMuchDoYouWorryAboutAODUse: 1,
       SDSIsAODUseOutOfControl: 2,
       SupportTypeBestMatchesNeedsGoals:
-        "Arcadia Residential Service - Non-medicated Detox Program 1 week, Althea Nurse"
+        "Arcadia Residential Service - Non-medicated Detox Program 1 week, Althea Nurse",
+        MLTCoping: 75,
+        MLTDayToDay: 45,
+        MLTGeneralWellbeing: 65,
+        MLTRelWithFamily: 75,
+        MLTRelWithFriends: 50,
+        K5_Score: 15
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:25,
       RowKey: "PSYCHNSW_INAS_20220618",
       Timestamp: "2022-06-18T00:03:21.990Z",
       AssessmentDate: "2022-06-18",
@@ -233,10 +263,17 @@ export default {
       SDSDoesMissingFixMakeAnxious: 1,
       SDSHowMuchDoYouWorryAboutAODUse: 2,
       SDSIsAODUseOutOfControl: 1,
-      SDS_Score: 6
+      SDS_Score: 6,
+      MLTCoping: 80,
+      MLTDayToDay: 65,
+      MLTGeneralWellbeing: 75,
+      MLTRelWithFamily: 70,
+      MLTRelWithFriends: 45,
+      K5_Score: 12
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:38,
       RowKey: "GOLBICE_INAS_20220406",
       Timestamp: "2022-04-05T21:46:58.193Z",
       AreYouAccessingOtherServices: "Yes",
@@ -289,10 +326,17 @@ export default {
       SpendTime_AODSourcingUsing: " ",
       SupportFromWhichOtherServices: "Other community health care service",
       SupportTypeBestMatchesNeedsGoals: "Case Management, Althea Pharmacist",
-      YourCurrentHousing: "At risk of eviction"
+      YourCurrentHousing: "At risk of eviction",
+      MLTCoping: 85,
+      MLTDayToDay: 75,
+      MLTGeneralWellbeing: 70,
+      MLTRelWithFamily: 60,
+      MLTRelWithFriends: 55,
+      K5_Score: 10
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:30,
       RowKey: "PSYCHACT_INAS_20220406",
       Timestamp: "2022-04-06T02:22:04.492Z",
       AreYouAccessingOtherServices: "Yes",
@@ -347,10 +391,17 @@ export default {
       SpendTime_AODSourcingUsing: " ",
       SupportFromWhichOtherServices: "Other community health care service",
       SupportTypeBestMatchesNeedsGoals: "Case Management, Althea Pharmacist",
-      YourCurrentHousing: "At risk of eviction"
+      YourCurrentHousing: "At risk of eviction",
+      MLTCoping: 95,
+      MLTDayToDay: 80,
+      MLTGeneralWellbeing: 70,
+      MLTRelWithFamily: 70,
+      MLTRelWithFriends: 35,
+      K5_Score: 12
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:35,
       RowKey: "TSS_POTA_20220321",
       Timestamp: "2022-03-21T04:01:51.845Z",
       AreYouAccessingOtherServices: "Yes",
@@ -405,6 +456,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:26,
       RowKey: "COCO_POTA_20220319",
       Timestamp: "2022-03-21T03:21:30.162Z",
       AreYouAccessingOtherServices: "Yes",
@@ -459,6 +511,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:37,
       RowKey: "COCO_POTA_20220317",
       Timestamp: "2022-03-17T04:00:33.486Z",
       AreYouAccessingOtherServices: "Yes",
@@ -513,6 +566,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:39,
       RowKey: "COCO_SITK_20220316",
       Timestamp: "2022-03-17T01:01:05.912Z",
       AreYouAccessingOtherServices: "Yes",
@@ -561,6 +615,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:18,
       RowKey: "TSS_ITSP_20220316",
       Timestamp: "2022-03-16T03:09:48.492Z",
       AreYouAccessingOtherServices: "Yes",
@@ -616,6 +671,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:24,
       RowKey: "TSS_undefined_20220316",
       Timestamp: "2022-03-15T23:11:50.069Z",
       AreYouAccessingOtherServices: "Yes",
@@ -674,6 +730,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:28,
       RowKey: "TSS_INAS_20220313",
       Timestamp: "2022-03-16T02:26:26.407Z",
       AreYouAccessingOtherServices: "Yes",
@@ -730,6 +787,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:30,
       RowKey: "TSS_INAS_20210505",
       Timestamp: "2021-05-05T02:03:45.701Z",
       AreYouAccessingOtherServices: "Yes",
@@ -791,6 +849,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:32,
       RowKey: "EUROPATH_INAS_20210329",
       Timestamp: "2021-03-29T04:06:11.756Z",
       AreYouCurrentlyTakingMeds: "Yes",
@@ -848,6 +907,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:36,
       RowKey: "EUROPATH_INAS_20210429",
       Timestamp: "2021-08-12T11:07:16.473Z",
       AreYouCurrentlyTakingMeds: "Yes",
@@ -910,6 +970,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:39,
       RowKey: "EUROPATH_INAS_20210318",
       Timestamp: "2021-03-18T02:00:15.484Z",
       AreYouCurrentlyTakingMeds: "Yes",
@@ -967,6 +1028,7 @@ export default {
     },
     {
       PartitionKey: "ALLFT210719811",
+      MLT_Score:40,
       RowKey: "COCO_INAS_20210310",
       Timestamp: "2021-03-18T01:44:09.723Z",
       AreYouCurrentlyTakingMeds: "Yes",

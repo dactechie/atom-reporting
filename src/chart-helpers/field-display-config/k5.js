@@ -1,13 +1,15 @@
 import {
   // getRangeAvg,
-  K10Colors
+  KesslerColors
   // monthNamesShort,
   // getMinMaxAcrossLists
-} from "../common/utils";
+} from "../../common/utils";
+import { CHART_TYPES } from "@/chart-helpers/chart-types";
 
+const chartType = CHART_TYPES.LINE;
 function pointBackgroundColor1(ctx) {
   if (!ctx.parsed.y) return undefined;
-  const col = K10Colors(ctx.parsed.y);
+  const col = KesslerColors(ctx.parsed.y, 2);
   // console.log("color  [y:" + ctx.parsed.y + "]  ;  color:" + col);
   return col;
 }
@@ -20,12 +22,12 @@ const options = {
   scales: {
     y: {
       min: 0,
-      max: 50
+      max: 25
     }
   },
   pan: {
     rangeMax: {
-      y: 50
+      y: 25
     }
   }
 };
@@ -51,8 +53,8 @@ const plugins = {
           display: true,
           content: "likely severe MH concerns"
         },
-        yMin: 30,
-        yMax: 50,
+        yMin: 15,
+        yMax: 25,
         backgroundColor: "rgba(255, 99, 132, 0.1)",
         borderWidth: 0
       },
@@ -62,7 +64,7 @@ const plugins = {
           display: true,
           content: "likely moderate MH concerns"
         },
-        yMin: 25,
+        yMin: 12.5,
         yMax: 29.9,
         backgroundColor: "rgba(235, 218, 33, 0.1)",
         borderWidth: 0
@@ -74,8 +76,8 @@ const plugins = {
           display: true,
           content: "Likely Mild MH concerns"
         },
-        yMin: 20,
-        yMax: 24.9,
+        yMin: 10,
+        yMax: 12.4,
         backgroundColor: "rgba(124, 245, 95, 0.1)",
         borderWidth: 0
       },
@@ -87,7 +89,7 @@ const plugins = {
           content: "Likely well"
         },
         yMin: 0,
-        yMax: 19.9,
+        yMax: 9.9,
         backgroundColor: "rgba(19, 245, 7, 0.1)",
         borderWidth: 0
       }
@@ -95,6 +97,9 @@ const plugins = {
   }
 };
 
-const field = "K10_Score";
-const title = "Kessler-10 Mental Health Scores (🡻 = 👍)";
-export { field, title, plugins, options };
+const fields = ["K5_Score"];
+const title = "Kessler-5 Mental Health Scores (🡻 = 👍)";
+
+const id = 'k5';
+
+export { id , fields, chartType, title, plugins, options };

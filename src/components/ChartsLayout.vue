@@ -1,21 +1,21 @@
 <script setup>
-import { ref, onBeforeMount } from "vue";
-import { getRangeAvg, monthNamesShort } from "../common/utils";
-import { setUpCharts } from "../chart-helpers/data-formatter";
+import { ref, onMounted } from "vue";
+import { monthNamesShort } from "../common/utils";
+import { setUpChartsData } from "../chart-helpers/data-formatter";
 import LineChart from "./LineChart.vue";
+import BarChart from "./BarChart.vue";
 
 const props = defineProps({
   userATOMs: Array,
   SLK: String
 });
-// const otherOptions = {
-//   tension: 0.2
-// };
+
 
 const PDCUse = ref({});
 
 let sds = ref({});
 let k10 = ref({});
+let mlt = ref({});
 
 const k10Title = "Kessler-10 Scores (🡻 = 👍)";
 
@@ -36,48 +36,8 @@ const phyMentQoLOpts = ref({
     }
   }
 });
-// const probsOpts = ref({});
+
 const probs = ref({});
-// const probsTitle = "Problems in Daily Life (🡻 = 👍)";
-
-const mapOfRatings = {
-  "Daily or almost daily": 4,
-  "Three or four times per week": 3,
-  "Less than weekly": 1,
-  "Once or twice per week": 2,
-  "Not at all": 0
-};
-
-const valueMappings = {
-  Past4WkHowOftenPhysicalHealthCausedProblems: mapOfRatings,
-  Past4WkHowOftenMentalHealthCausedProblems: mapOfRatings,
-  Past4WkUseLedToProblemsWithFamilyFriend: mapOfRatings,
-  Past4WkDailyLivingImpacted: mapOfRatings,
-  Past4WkDifficultyFindingHousing: mapOfRatings
-};
-const valueFuncs = {
-  PDCHowMuchPerOccassion: getRangeAvg
-};
-
-// const dataKey_labels = {
-//   PDCHowMuchPerOccassion: {
-//     label: "PDC How much per Occassion",
-//     backgroundColor: "#A17979"
-//   },
-//   PDCDaysInLast28: {
-//     label: "PDC Num. Days used in last 28",
-//     backgroundColor: "#3A4579"
-//   }
-// };
-
-// function getNumericArrayForField(atomData, field, mappingDict, mappingFunc) {
-//   if (mappingDict !== undefined)
-//     return atomData.map(a => mappingDict[a[field]]);
-//   else if (mappingFunc !== undefined)
-//     return atomData.map(a => mappingFunc(a[field]));
-
-//   return atomData.map(a => a[field]);
-// }
 
 function extendYscale(atomData, fieldName) {
   const numericList = atomData.map(a => a[fieldName]).filter(a => a);
@@ -92,38 +52,9 @@ function extendYscale(atomData, fieldName) {
   };
 }
 
-// function setupGenericMulti(atomData, dataKeys, xaxis) {
-//   const datasets = [];
 
-//   dataKeys.forEach(k => {
-//     const dataConfig = dataKey_labels[k];
-//     const valueMapping = valueMappings[k];
-//     const valueFunc = valueFuncs[k];
-
-//     datasets.push(
-//       Object.assign(
-//         { data: getNumericArrayForField(atomData, k, valueMapping, valueFunc) },
-//         dataConfig,
-//         otherOptions
-//       )
-//     );
-//     console.log(`Data Key ${k}, dataset:`, datasets);
-//   });
-
-//   return {
-//     labels: xaxis,
-//     datasets: datasets
-//     // options: {
-//     //   responsive: true,
-//     //   maintainAspectRatio: true,
-//     //   scales: {
-//     //     offset: true
-//     //   }
-//     // }
-//   };
-// }
-
-onBeforeMount(() => {
+onMounted(() => {
+  console.log("props", props)
   if (props.userATOMs === undefined || props.userATOMs.length <= 0) return;
   const atomData = props.userATOMs;
   const assessmentDates = atomData.map(
@@ -133,33 +64,20 @@ onBeforeMount(() => {
       }`
   );
 
-  // phyMentQoL.value = setupGenericMulti(
-  //   atomData,
-  //   [
-  //     "Past4WkPhysicalHealth",
-  //     "Past4WkMentalHealth",
-  //     "Past4WkQualityOfLifeScore"
-  //   ],
-  //   assessmentDates
-  // );
-
-  // PDCUseData.value = setupGenericMulti(
-  //   atomData,
-  //   ["PDCHowMuchPerOccassion", "PDCDaysInLast28"],
-  //   assessmentDates
-  // );
   DrugUseOpts.value = extendYscale(atomData, "PDCDaysInLast28");
 
-  const results = setUpCharts(atomData, assessmentDates);
+  const results = setUpChartsData(atomData, assessmentDates);
   sds.value = results["sds"];
   k10.value = results["k10"];
   probs.value = results["probs"];
   phyMentQoL.value = results["phyMentQoL"];
   PDCUse.value = results["PDCUse"];
+  mlt.value = results["mlt"];
+  console.log("atomData", atomData);
+  console.log(" sds ", sds.value);
+  // console.log(" k10 ", k10.value);
 });
-// onMounted(() => {
-//   // ready.value = true;
-// });
+
 
 // https://grid.layoutit.com/
 // https://medium.com/@nikkipantony/multi-grid-one-page-layout-css-grid-6efefd537404
@@ -168,15 +86,23 @@ onBeforeMount(() => {
 <template>
   <div class="container">
     <div class="LeftArea">
-      <div class="LeftTop">
+      <!-- <div class="LeftTop">
         <LineChart
           :chart-data="PDCUse.data"
           :chart-title="PDCUse.title"
           :chart-opts="DrugUseOpts"
         />
-      </div>
+      </div> -->
+      <BarChart    :chart-data="mlt.data"
+            :chart-title="mlt.title"
+            :chart-opts="mlt.options"
+            :chart-plugins="mlt.plugins"/>
       <div class="LeftBottom">
         <div class="LBt1">
+          <!-- <BarChart    :chart-data="mlt.data"
+            :chart-title="mlt.title"
+            :chart-opts="mlt.options"
+            :chart-plugins="mlt.plugins"/> -->
           <LineChart
             :chart-data="sds.data"
             :chart-title="sds.title"
@@ -193,7 +119,7 @@ onBeforeMount(() => {
           />
         </div>
       </div>
-    </div>
+    </div> 
     <div class="RightArea">
       <div class="RightTop">
         <LineChart

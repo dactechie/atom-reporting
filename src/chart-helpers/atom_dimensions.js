@@ -5,6 +5,13 @@ const dimensions_config = {
     pointBorderColor: "#999999",
     pointBorderWidth: 3
   },
+ 
+    MLT_Score: {
+      label: "MLT",
+      pointRadius: 6,
+      pointBorderColor: "#999999",
+      pointBorderWidth: 3
+    },
   K10_Score: {
     label: "K10",
     pointRadius: 6,
@@ -17,7 +24,7 @@ const dimensions_config = {
     backgroundColor: "#A17979"
   },
   PDCHowMuchPerOccassion: {
-    label: "PDC How much per Occassion",
+    label: "PDC How much per Occasion",
     backgroundColor: "#A17979"
   },
   PDCDaysInLast28: {

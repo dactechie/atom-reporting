@@ -1,5 +1,7 @@
 const fields = ["PDCHowMuchPerOccassion", "PDCDaysInLast28"];
+import { CHART_TYPES } from "@/chart-helpers/chart-types";
 
+const chartType = CHART_TYPES.LINE;
 const options = {
   scales: {
     y: {
@@ -72,4 +74,5 @@ const plugins = {
 //     backgroundColor: "#3A4579"
 //   }
 const title = "Princpal Drug use frequency & amount (🡻 = 👍)";
-export { fields, title, plugins, options };
+const id = 'druguse';
+export { id, fields, chartType, title, plugins, options };
